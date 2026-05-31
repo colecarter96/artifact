@@ -1,11 +1,12 @@
-export const SIZES = ["XS", "S", "M", "L", "XL", "XXL"] as const;
+export const SIZES = ["S", "M", "L", "XL", "2XL"] as const;
 export type Size = (typeof SIZES)[number];
 
 export type SizeChartRow = {
   size: Size;
-  chest: string;
   length: string;
   shoulder: string;
+  chest: string;
+  sleeveLength: string;
 };
 
 export type ColorVariant = {
@@ -27,6 +28,7 @@ export type Product = {
   /** Price in USD cents */
   price: number;
   compareAtPrice?: number;
+  stripePriceId: string;
   colors: ColorVariant[];
   sizes: Size[];
   featured?: boolean;
@@ -35,13 +37,14 @@ export type Product = {
 };
 
 const defaultSizeChart: SizeChartRow[] = [
-  { size: "XS", chest: '34"', length: '27"', shoulder: '16"' },
-  { size: "S", chest: '36"', length: '28"', shoulder: '17"' },
-  { size: "M", chest: '40"', length: '29"', shoulder: '18"' },
-  { size: "L", chest: '44"', length: '30"', shoulder: '19"' },
-  { size: "XL", chest: '48"', length: '31"', shoulder: '20"' },
-  { size: "XXL", chest: '52"', length: '32"', shoulder: '21"' },
+  { size: "S", length: "25.59", shoulder: "17.32", chest: "18.50", sleeveLength: "7.48" },
+  { size: "M", length: "26.77", shoulder: "18.50", chest: "19.68", sleeveLength: "7.87" },
+  { size: "L", length: "27.95", shoulder: "19.68", chest: "20.87", sleeveLength: "8.27" },
+  { size: "XL", length: "29.13", shoulder: "20.87", chest: "22.05", sleeveLength: "8.66" },
+  { size: "2XL", length: "30.31", shoulder: "22.05", chest: "23.23", sleeveLength: "9.06" },
 ];
+
+const allSizes: Size[] = ["S", "M", "L", "XL", "2XL"];
 
 /** $25 list price, 15% off */
 export const LIST_PRICE_CENTS = 2500;
@@ -77,8 +80,9 @@ export const products: Product[] = [
       "Midweight 100% cotton with a relaxed unisex fit. Pre-shrunk and built to soften with every wash.",
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TdGXWAKB242hqM6FTpyYFme",
     colors: singleColor("drywall.jpg", "Default", "#d4d4d4"),
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    sizes: allSizes,
     featured: true,
     tags: ["bestseller"],
     sizeChart: defaultSizeChart,
@@ -92,8 +96,9 @@ export const products: Product[] = [
       "Premium cotton jersey with a classic unisex cut. Soft hand, sharp print, made to last.",
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TdGXpAKB242hqM6SX6sfJEl",
     colors: singleColor("empath.jpg", "Default", "#1a1a1a"),
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    sizes: allSizes,
     featured: true,
     tags: ["new"],
     sizeChart: defaultSizeChart,
@@ -107,8 +112,9 @@ export const products: Product[] = [
       "100% cotton tee with garment-washed comfort and a true-to-size unisex fit.",
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TdGX0AKB242hqM6HKJA359Q",
     colors: singleColor("genitals.jpg", "Default", "#f5f5f5"),
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    sizes: allSizes,
     tags: ["limited"],
     sizeChart: defaultSizeChart,
   },
@@ -121,8 +127,9 @@ export const products: Product[] = [
       "Heavyweight feel, everyday ease. Double-stitched hems and a fit that works on everyone.",
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TdGWbAKB242hqM6YTaducRH",
     colors: singleColor("lesbian.jpg", "Default", "#1a1a1a"),
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    sizes: allSizes,
     featured: true,
     tags: ["popular"],
     sizeChart: defaultSizeChart,
@@ -136,8 +143,9 @@ export const products: Product[] = [
       "Classic crew neck in premium cotton. Clean lines, bold graphic, ships free worldwide.",
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TdGW1AKB242hqM680TMEfHj",
     colors: singleColor("puh.jpg", "Default", "#e5e5e5"),
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    sizes: allSizes,
     tags: ["new"],
     sizeChart: defaultSizeChart,
   },
@@ -150,8 +158,9 @@ export const products: Product[] = [
       "Our signature graphic tee on a soft cotton blank. Breathable, durable, designed for repeat buys.",
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TdGY7AKB242hqM6PYg7ooBv",
     colors: singleColor("switchUp.jpg", "Default", "#1a1a1a"),
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    sizes: allSizes,
     featured: true,
     tags: ["bestseller"],
     sizeChart: defaultSizeChart,

@@ -21,6 +21,7 @@ next-env.d.ts
 # Environment variables (keep .env.example committable)
 .env
 .env.*
+.env.local
 !.env.example
 
 # Vercel

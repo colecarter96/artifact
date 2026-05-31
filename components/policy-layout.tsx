@@ -15,7 +15,7 @@ export function PolicyLayout({ title, children }: PolicyLayoutProps) {
       >
         ← Back to shop
       </Link>
-      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      <h1 className="text-2xl font-semibold">{title}</h1>
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-neutral-600">
         {children}
       </div>

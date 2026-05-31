@@ -1,33 +1,22 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { promoMessages } from "@/lib/promos";
 
+const separator = "   ·   ";
+const marqueeContent = promoMessages.join(separator) + separator;
+
 export function PromoBar() {
-  const [index, setIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setVisible(false);
-      window.setTimeout(() => {
-        setIndex((i) => (i + 1) % promoMessages.length);
-        setVisible(true);
-      }, 220);
-    }, 3500);
-    return () => window.clearInterval(interval);
-  }, []);
-
   return (
-    <div className="bg-neutral-900 text-white text-center text-xs sm:text-sm font-medium tracking-wide">
-      <p
-        className={`py-2.5 px-4 transition-opacity duration-200 ${
-          visible ? "opacity-100" : "opacity-0"
-        }`}
-        aria-live="polite"
-      >
-        {promoMessages[index]}
-      </p>
+    <div
+      className="bg-pink-400 text-black text-xs sm:text-sm font-medium"
+      role="region"
+      aria-label="Store highlights"
+    >
+      <p className="sr-only">{promoMessages.join(". ")}</p>
+      <div className="overflow-hidden py-1" aria-hidden="true">
+        <div className="promo-marquee-track flex w-max">
+          <span className="shrink-0 px-6">{marqueeContent}</span>
+          <span className="shrink-0 px-6">{marqueeContent}</span>
+        </div>
+      </div>
     </div>
   );
 }

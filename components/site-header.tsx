@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/cart-context";
 
@@ -7,10 +8,17 @@ export function SiteHeader() {
   const { itemCount, bagPulse, openDrawer } = useCart();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+    <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white ">
       <div className="mx-auto flex h-14 max-w-lg items-center justify-between px-4">
-        <Link href="/" className="text-lg font-semibold tracking-tight">
-          Artifact
+        <Link href="/" className="flex items-center" aria-label="Artifact home">
+          <Image
+            src="/logos/logo.jpg"
+            alt="Artifact"
+            width={477}
+            height={100}
+            className="h-8 w-auto"
+            priority
+          />
         </Link>
         <button
           type="button"

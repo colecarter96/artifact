@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CheckoutTrust } from "@/components/checkout-trust";
 import { useCart } from "@/context/cart-context";
 import { formatUSD } from "@/lib/format";
@@ -16,6 +16,8 @@ export function CartDrawer() {
     removeItem,
     updateQuantity,
   } = useCart();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -27,6 +29,43 @@ export function CartDrawer() {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
+
+  async function handleCheckout() {
+    setCheckoutLoading(true);
+    setCheckoutError(null);
+
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((line) => ({
+            productId: line.productId,
+            slug: line.slug,
+            name: line.name,
+            colorName: line.colorName,
+            size: line.size,
+            quantity: line.quantity,
+          })),
+        }),
+      });
+
+      const data = (await response.json()) as { url?: string; error?: string };
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error ?? "Checkout failed. Please try again.");
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      setCheckoutError(
+        error instanceof Error
+          ? error.message
+          : "Checkout failed. Please try again.",
+      );
+      setCheckoutLoading(false);
+    }
+  }
 
   return (
     <>
@@ -157,16 +196,18 @@ export function CartDrawer() {
               <div className="mb-4">
                 <CheckoutTrust />
               </div>
+              {checkoutError && (
+                <p className="mb-3 text-xs text-red-600">{checkoutError}</p>
+              )}
               <button
                 type="button"
-                className="w-full bg-brand py-3.5 text-sm font-semibold text-brand-foreground transition active:scale-[0.98]"
-                onClick={() => {
-                  alert(
-                    "Stripe checkout coming soon. Your bag is saved locally.",
-                  );
-                }}
+                disabled={checkoutLoading}
+                className="w-full bg-brand py-3.5 text-sm font-semibold text-brand-foreground transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={handleCheckout}
               >
-                Checkout — {formatUSD(subtotal)}
+                {checkoutLoading
+                  ? "Redirecting to Stripe…"
+                  : `Checkout — ${formatUSD(subtotal)}`}
               </button>
               <button
                 type="button"

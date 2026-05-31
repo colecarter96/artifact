@@ -12,7 +12,7 @@ export default function ReturnsPage() {
     <PolicyLayout title="Returns & exchanges">
       <p>
         We want you to love your tee. If it&apos;s not right, you can return
-        unworn items within 30 days of delivery for a refund or exchange.
+        unworn items within 14 days of delivery for a refund or exchange.
       </p>
       <h2 className="text-base font-semibold text-neutral-900">How to return</h2>
       <ol className="list-decimal space-y-2 pl-5">

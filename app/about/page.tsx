@@ -15,7 +15,7 @@ export default function AboutPage() {
       >
         ← Back to shop
       </Link>
-      <h1 className="text-2xl font-semibold tracking-tight">About Artifact</h1>
+      <h1 className="text-2xl font-semibold">About Artifact</h1>
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-neutral-600">
         <p>
           Artifact makes premium cotton tees with a focus on fit, fabric, and
@@ -29,7 +29,7 @@ export default function AboutPage() {
         <p>
           Questions? Reach us at{" "}
           <a
-            href="mailto:hello@artifact.store"
+            href="mailto:the.twobrothers.studios@gmail.com"
             className="text-neutral-900 underline"
           >
             hello@artifact.store

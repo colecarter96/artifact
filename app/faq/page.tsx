@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "What if my shirt doesn't fit?",
-    a: "Check our size chart on each product page. If you need to swap sizes, see our returns page — 30-day returns on unworn items.",
+    a: "Check our size chart on each product page. If you need to swap sizes, see our returns page — 14-day returns on unworn items.",
   },
   {
     q: "How do I contact you?",

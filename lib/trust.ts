@@ -1,4 +1,4 @@
-export const SUPPORT_EMAIL = "hello@artifact.store";
+export const SUPPORT_EMAIL = "the.twobrothers.studios@gmail.com";
 
 export const SHIPPING_WINDOW = "7–14 business days";
 

@@ -78,11 +78,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
       <div className="mt-5 space-y-5">
         <div>
           {product.tags[0] && (
-            <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
+            <p className="mb-1 text-[10px] font-semibold uppercase text-neutral-500">
               {product.tags[0]}
             </p>
           )}
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h1 className="text-2xl font-semibold">
             {product.name}
           </h1>
           <p className="mt-1 text-sm text-neutral-600">{product.tagline}</p>
@@ -98,7 +98,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
               {formatUSD(product.price)}
             </span>
             {onSale && (
-              <span className="text-[10px] font-medium uppercase tracking-wide text-red-600">
+              <span className="text-[10px] font-medium uppercase text-red-600">
                 15% off
               </span>
             )}
@@ -107,7 +107,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             Free worldwide shipping · USD · Includes tracking
           </p>
           <p className="mt-2 flex items-center gap-2 text-[11px] text-neutral-500">
-            <span className="border border-neutral-200 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-neutral-600">
+            <span className="border border-neutral-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-neutral-600">
               Secure
             </span>
             Secure checkout · 14-day returns
@@ -117,7 +117,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
         {product.colors.length > 1 && (
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-medium uppercase tracking-wide">
+              <span className="text-xs font-medium uppercase">
                 Color — {color.name}
               </span>
             </div>
@@ -143,7 +143,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
 
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs font-medium uppercase tracking-wide">
+            <span className="text-xs font-medium uppercase">
               Size
             </span>
             <button
@@ -154,7 +154,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
               Size chart
             </button>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+          <div className="grid grid-cols-5 gap-2">
             {product.sizes.map((s) => (
               <button
                 key={s}

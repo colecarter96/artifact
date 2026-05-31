@@ -3,7 +3,7 @@ const badges = [
   { label: "Free Shipping" },
   { label: "Order Tracking" },
   { label: "Secure Checkout" },
-  { label: "30-Day Returns" },
+  { label: "14-Day Returns" },
   { label: "Real Support" },
 ] as const;
 

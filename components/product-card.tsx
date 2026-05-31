@@ -23,11 +23,6 @@ export function ProductCard({ product }: ProductCardProps) {
             className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
             sizes="(max-width: 512px) 50vw, 240px"
           />
-          {product.featured && (
-            <span className="absolute left-2 top-2 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
-              Popular
-            </span>
-          )}
         </div>
         <div className="mt-2.5 space-y-0.5">
           <h2 className="text-sm font-medium leading-snug">{product.name}</h2>
@@ -52,12 +47,6 @@ export function ProductCard({ product }: ProductCardProps) {
             </p>
           )}
         </div>
-      </Link>
-      <Link
-        href={`/products/${product.slug}`}
-        className="mt-2.5 flex h-9 items-center justify-center border border-neutral-900 text-xs font-semibold uppercase tracking-wide transition-colors hover:border-brand hover:bg-brand hover:text-brand-foreground"
-      >
-        Shop now
       </Link>
     </article>
   );

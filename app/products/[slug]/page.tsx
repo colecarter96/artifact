@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductPurchase } from "@/components/product-purchase";
 import {
@@ -37,12 +36,6 @@ export default async function ProductPage({ params }: PageProps) {
 
   return (
     <div className="pt-2">
-      <Link
-        href="/"
-        className="mb-4 inline-flex items-center text-xs text-neutral-500 hover:text-neutral-900"
-      >
-        ← Back to shop
-      </Link>
       <ProductPurchase product={product} />
     </div>
   );

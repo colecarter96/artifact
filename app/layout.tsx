@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { Providers } from "./providers";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const comicHelvetic = localFont({
+  src: [
+    { path: "./fonts/ComicHelvetic_Light.otf", weight: "300" },
+    { path: "./fonts/ComicHelvetic_Medium.otf", weight: "400" },
+    { path: "./fonts/ComicHelvetic_Medium.otf", weight: "500" },
+    { path: "./fonts/ComicHelvetic_Heavy.otf", weight: "700" },
+    { path: "./fonts/ComicHelvetic_Heavy.otf", weight: "800" },
+  ],
+  variable: "--font-comic-helvetic",
 });
 
 export const metadata: Metadata = {
@@ -23,8 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} h-full`}>
-      <body className="flex min-h-full flex-col bg-white font-sans text-neutral-900 antialiased">
+    <html lang="en" className={`${comicHelvetic.variable} h-full`}>
+      <body
+        className={`${comicHelvetic.className} flex min-h-full flex-col bg-white text-neutral-900 tracking-wide antialiased`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

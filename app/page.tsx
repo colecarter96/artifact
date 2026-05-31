@@ -1,27 +1,18 @@
 import { OrderTimeline } from "@/components/order-timeline";
 import { ProductCard } from "@/components/product-card";
-import { TrustBadges } from "@/components/trust-badges";
+import { ScrollReveal } from "@/components/scroll-reveal";
+import { ShopHero } from "@/components/shop-hero";
 import { TrustReassurance } from "@/components/trust-reassurance";
 import { products } from "@/lib/products";
 
 export default function HomePage() {
   return (
     <div className="pt-4">
-      <section className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Premium cotton tees
-        </h1>
-        <p className="mt-2 text-sm text-neutral-600">
-          Minimal blanks. Built to last. Shipped free, worldwide.
-        </p>
-        <div className="mt-5">
-          <TrustBadges />
-        </div>
-      </section>
+      <ShopHero />
 
-      <section aria-label="All shirts">
+      <section id="shop" aria-label="All shirts">
         <div className="mb-4 flex items-end justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide">
+          <h2 className="text-sm font-semibold uppercase">
             Shop all
           </h2>
           <span className="text-xs text-neutral-500">
@@ -29,19 +20,25 @@ export default function HomePage() {
           </span>
         </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-8">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, index) => (
+            <ScrollReveal key={product.id} delay={index * 80}>
+              <ProductCard product={product} />
+            </ScrollReveal>
           ))}
         </div>
       </section>
 
       <section className="mt-10 space-y-8">
-        <OrderTimeline />
-        <TrustReassurance />
+        <ScrollReveal>
+          <OrderTimeline />
+        </ScrollReveal>
+        <ScrollReveal delay={120}>
+          <TrustReassurance />
+        </ScrollReveal>
       </section>
 
       <section className="mt-10 bg-neutral-900 px-5 py-6 text-center text-white">
-        <p className="text-xs font-medium uppercase tracking-widest text-neutral-400">
+        <p className="text-xs font-medium uppercase text-neutral-400">
           Limited launch offer
         </p>
         <p className="mt-2 text-lg font-semibold">

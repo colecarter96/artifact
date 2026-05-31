@@ -8,15 +8,9 @@
 @theme {
   --color-background: #ffffff;
   --color-foreground: #171717;
-  --color-brand: #e89eb8;
+  --color-brand: var(--color-pink-400);
   --color-brand-foreground: #171717;
-  --font-sans: var(--font-geist-sans);
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: var(--font-comic-helvetic), system-ui, sans-serif;
 }
 
 @keyframes bag-pulse {
@@ -31,4 +25,54 @@ body {
 
 .animate-bag-pulse {
   animation: bag-pulse 0.45s ease-out;
+}
+
+@keyframes promo-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.promo-marquee-track {
+  animation: promo-marquee 50s linear infinite;
+}
+
+@media (max-width: 767px) {
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(1.75rem);
+    transition:
+      opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  .scroll-reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .promo-marquee-track {
+    animation: none;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+    padding-inline: 1rem;
+  }
+
+  .promo-marquee-track span:last-child {
+    display: none;
+  }
 }

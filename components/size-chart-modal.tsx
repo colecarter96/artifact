@@ -57,18 +57,20 @@ export function SizeChartModal({
             <thead>
               <tr className="border-b border-neutral-200 text-neutral-500">
                 <th className="pb-2 pr-4 font-medium">Size</th>
-                <th className="pb-2 pr-4 font-medium">Chest</th>
                 <th className="pb-2 pr-4 font-medium">Length</th>
-                <th className="pb-2 font-medium">Shoulder</th>
+                <th className="pb-2 pr-4 font-medium">Shoulder</th>
+                <th className="pb-2 pr-4 font-medium">Chest</th>
+                <th className="pb-2 font-medium">Sleeve</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.size} className="border-b border-neutral-100">
                   <td className="py-2.5 pr-4 font-semibold">{row.size}</td>
-                  <td className="py-2.5 pr-4">{row.chest}</td>
                   <td className="py-2.5 pr-4">{row.length}</td>
-                  <td className="py-2.5">{row.shoulder}</td>
+                  <td className="py-2.5 pr-4">{row.shoulder}</td>
+                  <td className="py-2.5 pr-4">{row.chest}</td>
+                  <td className="py-2.5">{row.sleeveLength}</td>
                 </tr>
               ))}
             </tbody>
