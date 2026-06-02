@@ -28,7 +28,8 @@ export type Product = {
   /** Price in USD cents */
   price: number;
   compareAtPrice?: number;
-  stripePriceId: string;
+  /** Omit until a Stripe Price is created for this design */
+  stripePriceId?: string;
   colors: ColorVariant[];
   sizes: Size[];
   featured?: boolean;
@@ -55,7 +56,8 @@ function image(path: string): string {
 }
 
 function singleColor(
-  imageFile: string,
+  mainFile: string,
+  gridFile: string,
   name: string,
   hex: string,
 ): ColorVariant[] {
@@ -64,29 +66,13 @@ function singleColor(
       id: "default",
       name,
       hex,
-      image: image(imageFile),
-      gridImage: image(`zoomed/${imageFile}`),
+      image: image(mainFile),
+      gridImage: image(gridFile),
     },
   ];
 }
 
 export const products: Product[] = [
-  {
-    id: "drywall",
-    slug: "drywall",
-    name: "Drywall",
-    tagline: "Built different",
-    description:
-      "Midweight 100% cotton with a relaxed unisex fit. Pre-shrunk and built to soften with every wash.",
-    compareAtPrice: LIST_PRICE_CENTS,
-    price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TdGXWAKB242hqM6FTpyYFme",
-    colors: singleColor("drywall.jpg", "Default", "#d4d4d4"),
-    sizes: allSizes,
-    featured: true,
-    tags: ["bestseller"],
-    sizeChart: defaultSizeChart,
-  },
   {
     id: "empath",
     slug: "empath",
@@ -97,7 +83,7 @@ export const products: Product[] = [
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
     stripePriceId: "price_1TdGXpAKB242hqM6SX6sfJEl",
-    colors: singleColor("empath.jpg", "Default", "#1a1a1a"),
+    colors: singleColor("empath.jpg", "zoomed/empath.jpg", "Default", "#1a1a1a"),
     sizes: allSizes,
     featured: true,
     tags: ["new"],
@@ -113,7 +99,7 @@ export const products: Product[] = [
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
     stripePriceId: "price_1TdGX0AKB242hqM6HKJA359Q",
-    colors: singleColor("genitals.jpg", "Default", "#f5f5f5"),
+    colors: singleColor("genitals.jpg", "zoomed/genitals.jpg", "Default", "#f5f5f5"),
     sizes: allSizes,
     tags: ["limited"],
     sizeChart: defaultSizeChart,
@@ -128,10 +114,30 @@ export const products: Product[] = [
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
     stripePriceId: "price_1TdGWbAKB242hqM6YTaducRH",
-    colors: singleColor("lesbian.jpg", "Default", "#1a1a1a"),
+    colors: singleColor("lesbian.jpg", "zoomed/lesbian.jpg", "Default", "#1a1a1a"),
     sizes: allSizes,
     featured: true,
     tags: ["popular"],
+    sizeChart: defaultSizeChart,
+  },
+  {
+    id: "open-minded",
+    slug: "open-minded",
+    name: "Open Minded",
+    tagline: "Think bigger",
+    description:
+      "Midweight 100% cotton with a relaxed unisex fit. Pre-shrunk and built to soften with every wash.",
+    compareAtPrice: LIST_PRICE_CENTS,
+    price: SALE_PRICE_CENTS,
+    colors: singleColor(
+      "openMinded.jpg",
+      "zoomed/openMinded.jpg",
+      "Default",
+      "#1a1a1a",
+    ),
+    sizes: allSizes,
+    featured: true,
+    tags: ["new"],
     sizeChart: defaultSizeChart,
   },
   {
@@ -144,7 +150,7 @@ export const products: Product[] = [
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
     stripePriceId: "price_1TdGW1AKB242hqM680TMEfHj",
-    colors: singleColor("puh.jpg", "Default", "#e5e5e5"),
+    colors: singleColor("puh.jpg", "zoomed/puh.jpg", "Default", "#e5e5e5"),
     sizes: allSizes,
     tags: ["new"],
     sizeChart: defaultSizeChart,
@@ -159,10 +165,34 @@ export const products: Product[] = [
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
     stripePriceId: "price_1TdGY7AKB242hqM6PYg7ooBv",
-    colors: singleColor("switchUp.jpg", "Default", "#1a1a1a"),
+    colors: singleColor(
+      "zoomed/switch.jpg",
+      "zoomed/switch.jpg",
+      "Default",
+      "#1a1a1a",
+    ),
     sizes: allSizes,
     featured: true,
     tags: ["bestseller"],
+    sizeChart: defaultSizeChart,
+  },
+  {
+    id: "day-ones",
+    slug: "day-ones",
+    name: "Day Ones",
+    tagline: "From the jump",
+    description:
+      "Premium cotton jersey with a classic unisex cut. Soft hand, sharp print, made to last.",
+    compareAtPrice: LIST_PRICE_CENTS,
+    price: SALE_PRICE_CENTS,
+    colors: singleColor(
+      "dayOnesFront.jpg",
+      "dayOnesFront.jpg",
+      "Default",
+      "#d4d4d4",
+    ),
+    sizes: allSizes,
+    tags: ["new"],
     sizeChart: defaultSizeChart,
   },
 ];
@@ -173,4 +203,8 @@ export function getProductBySlug(slug: string): Product | undefined {
 
 export function getAllProductSlugs(): string[] {
   return products.map((p) => p.slug);
+}
+
+export function isProductCheckoutReady(product: Product): boolean {
+  return Boolean(product.stripePriceId);
 }

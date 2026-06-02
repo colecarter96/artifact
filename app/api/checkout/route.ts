@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { buildCheckoutMetadata } from "@/lib/checkout-metadata";
 import type { CartLine } from "@/lib/cart";
-import { products } from "@/lib/products";
+import { isProductCheckoutReady, products } from "@/lib/products";
 import { SHIPPING_COUNTRIES } from "@/lib/shipping-countries";
 import { getStripe } from "@/lib/stripe";
 
@@ -64,8 +64,17 @@ export async function POST(request: Request) {
         );
       }
 
+      if (!isProductCheckoutReady(product)) {
+        return NextResponse.json(
+          {
+            error: `${product.name} isn't available for checkout yet. Remove it from your bag or try another style.`,
+          },
+          { status: 400 },
+        );
+      }
+
       lineItems.push({
-        price: product.stripePriceId,
+        price: product.stripePriceId!,
         quantity: item.quantity,
       });
 

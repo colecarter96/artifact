@@ -4,7 +4,12 @@ import Image from "next/image";
 import { useState } from "react";
 import { useCart } from "@/context/cart-context";
 import { formatUSD } from "@/lib/format";
-import type { ColorVariant, Product, Size } from "@/lib/products";
+import {
+  isProductCheckoutReady,
+  type ColorVariant,
+  type Product,
+  type Size,
+} from "@/lib/products";
 import { CheckoutTrust } from "./checkout-trust";
 import { OrderTimeline } from "./order-timeline";
 import { SizeChartModal } from "./size-chart-modal";
@@ -25,6 +30,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   const onSale =
     product.compareAtPrice != null &&
     product.compareAtPrice > product.price;
+  const checkoutReady = isProductCheckoutReady(product);
 
   function validateSize(): boolean {
     if (!selectedSize) {
@@ -106,6 +112,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
           <p className="mt-1 text-xs text-neutral-500">
             Free worldwide shipping · USD · Includes tracking
           </p>
+          {!checkoutReady && (
+            <p className="mt-2 text-xs text-neutral-600">
+              Coming soon — checkout not live for this design yet.
+            </p>
+          )}
           <p className="mt-2 flex items-center gap-2 text-[11px] text-neutral-500">
             <span className="border border-neutral-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-neutral-600">
               Secure
