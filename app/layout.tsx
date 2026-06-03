@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${comicHelvetic.className} flex min-h-full flex-col bg-white text-neutral-900 tracking-wide antialiased`}
       >
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );
