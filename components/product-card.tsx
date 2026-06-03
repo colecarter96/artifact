@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProductDualGridImage } from "@/components/product-dual-grid-image";
 import { formatUSD } from "@/lib/format";
-import type { Product } from "@/lib/products";
+import { hasDualViews, type Product } from "@/lib/products";
 
 type ProductCardProps = {
   product: Product;
@@ -15,15 +16,23 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <article className="group relative flex flex-col">
       <Link href={`/products/${product.slug}`} className="flex flex-col">
-        <div className="relative aspect-square overflow-hidden bg-neutral-100">
-          <Image
-            src={primary.gridImage}
+        {hasDualViews(product) ? (
+          <ProductDualGridImage
+            views={product.views}
             alt={product.name}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            sizes="(max-width: 512px) 50vw, 240px"
+            className="transition-transform duration-300"
           />
-        </div>
+        ) : (
+          <div className="relative aspect-square overflow-hidden bg-neutral-100">
+            <Image
+              src={primary.gridImage}
+              alt={product.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 512px) 50vw, 240px"
+            />
+          </div>
+        )}
         <div className="mt-2.5 space-y-0.5">
           <h2 className="text-sm font-medium leading-snug">{product.name}</h2>
           <p className="text-xs text-neutral-500 line-clamp-1">

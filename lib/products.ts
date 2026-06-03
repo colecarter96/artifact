@@ -19,6 +19,11 @@ export type ColorVariant = {
   gridImage: string;
 };
 
+export type DualViews = {
+  front: { full: string; grid: string };
+  back: { full: string; grid: string };
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -30,12 +35,20 @@ export type Product = {
   compareAtPrice?: number;
   /** Omit until a Stripe Price is created for this design */
   stripePriceId?: string;
+  /** Front/back graphics — grid auto-flips, product page swipe gallery */
+  views?: DualViews;
   colors: ColorVariant[];
   sizes: Size[];
   featured?: boolean;
   tags: string[];
   sizeChart: SizeChartRow[];
 };
+
+export function hasDualViews(
+  product: Product,
+): product is Product & { views: DualViews } {
+  return product.views != null;
+}
 
 const defaultSizeChart: SizeChartRow[] = [
   { size: "S", length: "25.59", shoulder: "17.32", chest: "18.50", sleeveLength: "7.48" },
@@ -50,6 +63,9 @@ const allSizes: Size[] = ["S", "M", "L", "XL", "2XL"];
 /** $25 list price, 15% off */
 export const LIST_PRICE_CENTS = 2500;
 export const SALE_PRICE_CENTS = 2125;
+
+export const PRODUCT_DESCRIPTION =
+  "100% cotton shirts for people with something wrong with them. In a good way.";
 
 function image(path: string): string {
   return `/shirtImages/${path}`;
@@ -78,11 +94,10 @@ export const products: Product[] = [
     slug: "empath",
     name: "Empath",
     tagline: "Feel everything",
-    description:
-      "Premium cotton jersey with a classic unisex cut. Soft hand, sharp print, made to last.",
+    description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TdGXpAKB242hqM6SX6sfJEl",
+    stripePriceId: "price_1TeIfYAKB242hqM6AMTlv75a",
     colors: singleColor("empath.jpg", "zoomed/empath.jpg", "Default", "#1a1a1a"),
     sizes: allSizes,
     featured: true,
@@ -94,11 +109,10 @@ export const products: Product[] = [
     slug: "genitals",
     name: "Genitals",
     tagline: "Say it loud",
-    description:
-      "100% cotton tee with garment-washed comfort and a true-to-size unisex fit.",
+    description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TdGX0AKB242hqM6HKJA359Q",
+    stripePriceId: "price_1TeIgOAKB242hqM6nHGVwoTu",
     colors: singleColor("genitals.jpg", "zoomed/genitals.jpg", "Default", "#f5f5f5"),
     sizes: allSizes,
     tags: ["limited"],
@@ -109,11 +123,10 @@ export const products: Product[] = [
     slug: "lesbian",
     name: "Lesbian",
     tagline: "Wear it proud",
-    description:
-      "Heavyweight feel, everyday ease. Double-stitched hems and a fit that works on everyone.",
+    description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TdGWbAKB242hqM6YTaducRH",
+    stripePriceId: "price_1TeIglAKB242hqM6ZKDvSiWu",
     colors: singleColor("lesbian.jpg", "zoomed/lesbian.jpg", "Default", "#1a1a1a"),
     sizes: allSizes,
     featured: true,
@@ -125,10 +138,10 @@ export const products: Product[] = [
     slug: "open-minded",
     name: "Open Minded",
     tagline: "Think bigger",
-    description:
-      "Midweight 100% cotton with a relaxed unisex fit. Pre-shrunk and built to soften with every wash.",
+    description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TeIfzAKB242hqM6bi1ONkRk",
     colors: singleColor(
       "openMinded.jpg",
       "zoomed/openMinded.jpg",
@@ -145,35 +158,13 @@ export const products: Product[] = [
     slug: "puh",
     name: "Puh",
     tagline: "No explanation needed",
-    description:
-      "Classic crew neck in premium cotton. Clean lines, bold graphic, ships free worldwide.",
+    description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TdGW1AKB242hqM680TMEfHj",
+    stripePriceId: "price_1TeIecAKB242hqM6RixF21Nf",
     colors: singleColor("puh.jpg", "zoomed/puh.jpg", "Default", "#e5e5e5"),
     sizes: allSizes,
     tags: ["new"],
-    sizeChart: defaultSizeChart,
-  },
-  {
-    id: "switch-up",
-    slug: "switch-up",
-    name: "Switch Up",
-    tagline: "Flip the script",
-    description:
-      "Our signature graphic tee on a soft cotton blank. Breathable, durable, designed for repeat buys.",
-    compareAtPrice: LIST_PRICE_CENTS,
-    price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TdGY7AKB242hqM6PYg7ooBv",
-    colors: singleColor(
-      "zoomed/switch.jpg",
-      "zoomed/switch.jpg",
-      "Default",
-      "#1a1a1a",
-    ),
-    sizes: allSizes,
-    featured: true,
-    tags: ["bestseller"],
     sizeChart: defaultSizeChart,
   },
   {
@@ -181,17 +172,28 @@ export const products: Product[] = [
     slug: "day-ones",
     name: "Day Ones",
     tagline: "From the jump",
-    description:
-      "Premium cotton jersey with a classic unisex cut. Soft hand, sharp print, made to last.",
+    description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TeIfAAKB242hqM6uZXeK1oZ",
+    views: {
+      front: {
+        full: image("dayOnesFront.jpg"),
+        grid: image("zoomed/switch.jpg"),
+      },
+      back: {
+        full: image("dayOnesBack.jpg"),
+        grid: image("zoomed/switchBack.jpg"),
+      },
+    },
     colors: singleColor(
       "dayOnesFront.jpg",
-      "dayOnesFront.jpg",
+      "zoomed/switch.jpg",
       "Default",
       "#d4d4d4",
     ),
     sizes: allSizes,
+    featured: true,
     tags: ["new"],
     sizeChart: defaultSizeChart,
   },

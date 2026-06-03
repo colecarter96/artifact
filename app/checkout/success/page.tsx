@@ -26,10 +26,6 @@ function CheckoutSuccessContent() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    clearCart();
-  }, [clearCart]);
-
-  useEffect(() => {
     if (!sessionId) {
       setLoading(false);
       return;
@@ -53,6 +49,11 @@ function CheckoutSuccessContent() {
 
         if (!cancelled) {
           setOrder(data);
+          const clearedKey = `artifact-checkout-cleared-${id}`;
+          if (!sessionStorage.getItem(clearedKey)) {
+            clearCart();
+            sessionStorage.setItem(clearedKey, "1");
+          }
         }
       } catch (err) {
         if (!cancelled) {
@@ -72,7 +73,7 @@ function CheckoutSuccessContent() {
     return () => {
       cancelled = true;
     };
-  }, [sessionId]);
+  }, [sessionId, clearCart]);
 
   return (
     <div className="py-6">

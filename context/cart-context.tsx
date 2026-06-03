@@ -11,12 +11,12 @@ import {
 } from "react";
 import {
   type CartLine,
-  cartLineKey,
+  clearCartStorage,
   createLineId,
+  readCartFromStorage,
+  writeCartToStorage,
 } from "@/lib/cart";
 import type { Size } from "@/lib/products";
-
-const STORAGE_KEY = "artifact-cart";
 
 type AddItemInput = {
   productId: string;
@@ -36,6 +36,7 @@ type CartContextValue = {
   subtotal: number;
   isOpen: boolean;
   bagPulse: boolean;
+  hydrated: boolean;
   openDrawer: () => void;
   closeDrawer: () => void;
   addItem: (input: AddItemInput) => void;
@@ -47,18 +48,6 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-function loadStoredItems(): CartLine[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as CartLine[];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartLine[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -66,13 +55,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [bagPulse, setBagPulse] = useState(false);
 
   useEffect(() => {
-    setItems(loadStoredItems());
+    setItems(readCartFromStorage());
     setHydrated(true);
   }, []);
 
   useEffect(() => {
     if (!hydrated) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    writeCartToStorage(items);
   }, [items, hydrated]);
 
   const itemCount = useMemo(
@@ -90,38 +79,45 @@ export function CartProvider({ children }: { children: ReactNode }) {
     window.setTimeout(() => setBagPulse(false), 450);
   }, []);
 
-  const upsertItem = useCallback((input: AddItemInput, replaceCart: boolean) => {
-    const quantity = input.quantity ?? 1;
-    const lineId = createLineId(input.productId, input.colorId, input.size);
+  const upsertItem = useCallback(
+    (input: AddItemInput, replaceCart: boolean) => {
+      const quantity = input.quantity ?? 1;
+      const lineId = createLineId(input.productId, input.colorId, input.size);
 
-    setItems((prev) => {
-      const base = replaceCart ? [] : prev;
-      const existing = base.find((line) => line.lineId === lineId);
+      setItems((prev) => {
+        const base = replaceCart
+          ? []
+          : hydrated
+            ? prev
+            : readCartFromStorage();
+        const existing = base.find((line) => line.lineId === lineId);
 
-      if (existing) {
-        return base.map((line) =>
-          line.lineId === lineId
-            ? { ...line, quantity: line.quantity + quantity }
-            : line,
-        );
-      }
+        if (existing) {
+          return base.map((line) =>
+            line.lineId === lineId
+              ? { ...line, quantity: line.quantity + quantity }
+              : line,
+          );
+        }
 
-      const line: CartLine = {
-        lineId,
-        productId: input.productId,
-        slug: input.slug,
-        name: input.name,
-        colorId: input.colorId,
-        colorName: input.colorName,
-        size: input.size,
-        price: input.price,
-        image: input.image,
-        quantity,
-      };
+        const line: CartLine = {
+          lineId,
+          productId: input.productId,
+          slug: input.slug,
+          name: input.name,
+          colorId: input.colorId,
+          colorName: input.colorName,
+          size: input.size,
+          price: input.price,
+          image: input.image,
+          quantity,
+        };
 
-      return [...base, line];
-    });
-  }, []);
+        return [...base, line];
+      });
+    },
+    [hydrated],
+  );
 
   const addItem = useCallback(
     (input: AddItemInput) => {
@@ -133,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const buyNow = useCallback(
     (input: AddItemInput) => {
-      upsertItem({ ...input, quantity: input.quantity ?? 1 }, true);
+      upsertItem({ ...input, quantity: input.quantity ?? 1 }, false);
       setIsOpen(true);
     },
     [upsertItem],
@@ -155,6 +151,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  const clearCart = useCallback(() => {
+    setItems([]);
+    clearCartStorage();
+  }, []);
+
   const value = useMemo<CartContextValue>(
     () => ({
       items,
@@ -162,13 +163,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       isOpen,
       bagPulse,
+      hydrated,
       openDrawer: () => setIsOpen(true),
       closeDrawer: () => setIsOpen(false),
       addItem,
       buyNow,
       removeItem,
       updateQuantity,
-      clearCart: () => setItems([]),
+      clearCart,
     }),
     [
       items,
@@ -176,10 +178,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       isOpen,
       bagPulse,
+      hydrated,
       addItem,
       buyNow,
       removeItem,
       updateQuantity,
+      clearCart,
     ],
   );
 
@@ -193,5 +197,3 @@ export function useCart() {
   }
   return ctx;
 }
-
-export { cartLineKey };
