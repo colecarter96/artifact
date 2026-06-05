@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { heroSlides } from "@/lib/hero-slides";
 
-const ROTATE_MS = 5500;
+const ROTATE_MS = 2000;
 
 export function ShopHeroModel() {
   const [index, setIndex] = useState(0);
