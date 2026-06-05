@@ -61,7 +61,7 @@ const defaultSizeChart: SizeChartRow[] = [
 const allSizes: Size[] = ["S", "M", "L", "XL", "2XL"];
 
 /** $25 list price, 15% off */
-export const LIST_PRICE_CENTS = 2500;
+export const LIST_PRICE_CENTS = 4250;
 export const SALE_PRICE_CENTS = 2125;
 
 export const PRODUCT_DESCRIPTION =
@@ -92,8 +92,8 @@ export const products: Product[] = [
   {
     id: "empath",
     slug: "empath",
-    name: "Empath",
-    tagline: "Feel everything",
+    name: "I'm an Empath",
+    tagline: "",
     description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
@@ -105,39 +105,10 @@ export const products: Product[] = [
     sizeChart: defaultSizeChart,
   },
   {
-    id: "genitals",
-    slug: "genitals",
-    name: "Genitals",
-    tagline: "Say it loud",
-    description: PRODUCT_DESCRIPTION,
-    compareAtPrice: LIST_PRICE_CENTS,
-    price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TeIgOAKB242hqM6nHGVwoTu",
-    colors: singleColor("genitals.jpg", "zoomed/genitals.jpg", "Default", "#f5f5f5"),
-    sizes: allSizes,
-    tags: ["limited"],
-    sizeChart: defaultSizeChart,
-  },
-  {
-    id: "lesbian",
-    slug: "lesbian",
-    name: "Lesbian",
-    tagline: "Wear it proud",
-    description: PRODUCT_DESCRIPTION,
-    compareAtPrice: LIST_PRICE_CENTS,
-    price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TeIglAKB242hqM6ZKDvSiWu",
-    colors: singleColor("lesbian.jpg", "zoomed/lesbian.jpg", "Default", "#1a1a1a"),
-    sizes: allSizes,
-    featured: true,
-    tags: ["popular"],
-    sizeChart: defaultSizeChart,
-  },
-  {
     id: "open-minded",
     slug: "open-minded",
-    name: "Open Minded",
-    tagline: "Think bigger",
+    name: "How Open Minded Are You?",
+    tagline: "",
     description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
@@ -154,9 +125,40 @@ export const products: Product[] = [
     sizeChart: defaultSizeChart,
   },
   {
+    id: "lesbian",
+    slug: "lesbian",
+    name: "Nobody Knows I'm a Lesbian",
+    tagline: "",
+    description: PRODUCT_DESCRIPTION,
+    compareAtPrice: LIST_PRICE_CENTS,
+    price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TeIglAKB242hqM6ZKDvSiWu",
+    colors: singleColor("lesbian.jpg", "zoomed/lesbian.jpg", "Default", "#1a1a1a"),
+    sizes: allSizes,
+    featured: true,
+    tags: ["popular"],
+    sizeChart: defaultSizeChart,
+  },
+  {
+    id: "genitals",
+    slug: "genitals",
+    name: "I Have Normal Looking Gentials",
+    tagline: "",
+    description: PRODUCT_DESCRIPTION,
+    compareAtPrice: LIST_PRICE_CENTS,
+    price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TeIgOAKB242hqM6nHGVwoTu",
+    colors: singleColor("genitals.jpg", "zoomed/genitals.jpg", "Default", "#f5f5f5"),
+    sizes: allSizes,
+    tags: ["limited"],
+    sizeChart: defaultSizeChart,
+  },
+  
+  
+  {
     id: "puh",
     slug: "puh",
-    name: "Puh",
+    name: "Eat Mor Puh",
     tagline: "No explanation needed",
     description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
@@ -170,7 +172,7 @@ export const products: Product[] = [
   {
     id: "day-ones",
     slug: "day-ones",
-    name: "Day Ones",
+    name: "Switch Up on my Day Ones",
     tagline: "From the jump",
     description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,

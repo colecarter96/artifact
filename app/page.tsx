@@ -1,14 +1,14 @@
 import { OrderTimeline } from "@/components/order-timeline";
 import { ProductCard } from "@/components/product-card";
 import { ScrollReveal } from "@/components/scroll-reveal";
-import { ShopHero } from "@/components/shop-hero";
+import { ShopHeroModel } from "@/components/shop-hero-model";
 import { TrustReassurance } from "@/components/trust-reassurance";
 import { products } from "@/lib/products";
 
 export default function HomePage() {
   return (
     <div className="pt-4">
-      <ShopHero />
+      <ShopHeroModel />
 
       <section id="shop" aria-label="All shirts">
         <div className="mb-4 flex items-end justify-between">
@@ -19,9 +19,13 @@ export default function HomePage() {
             {products.length} styles
           </span>
         </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-8">
+        <div className="grid grid-cols-1 gap-x-3 gap-y-8">
           {products.map((product, index) => (
-            <ScrollReveal key={product.id} delay={index * 80}>
+            <ScrollReveal
+              key={product.id}
+              delay={index * 50}
+              rootMargin="0px 0px 25% 0px"
+            >
               <ProductCard product={product} />
             </ScrollReveal>
           ))}

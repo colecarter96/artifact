@@ -28,7 +28,7 @@ export function ProductDualGridImage({
   return (
     <div className={`relative aspect-square overflow-hidden bg-neutral-100 ${className}`}>
       <Image
-        src={views.front.grid}
+        src={views.front.full}
         alt={`${alt} — front`}
         fill
         className={`object-cover transition-opacity duration-500 ${
@@ -37,7 +37,7 @@ export function ProductDualGridImage({
         sizes="(max-width: 512px) 50vw, 240px"
       />
       <Image
-        src={views.back.grid}
+        src={views.back.full}
         alt={`${alt} — back`}
         fill
         className={`object-cover transition-opacity duration-500 ${

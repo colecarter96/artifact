@@ -7,12 +7,15 @@ type ScrollRevealProps = {
   className?: string;
   /** Stagger delay in ms */
   delay?: number;
+  /** IntersectionObserver rootMargin — positive bottom values trigger earlier */
+  rootMargin?: string;
 };
 
 export function ScrollReveal({
   children,
   className = "",
   delay = 0,
+  rootMargin = "0px 0px -8% 0px",
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -42,12 +45,12 @@ export function ScrollReveal({
           observer.unobserve(el);
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.09, rootMargin },
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [rootMargin]);
 
   return (
     <div

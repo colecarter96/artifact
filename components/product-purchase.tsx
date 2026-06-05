@@ -1,18 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { useCart } from "@/context/cart-context";
 import { formatUSD } from "@/lib/format";
 import {
-  hasDualViews,
   isProductCheckoutReady,
   type ColorVariant,
   type Product,
   type Size,
 } from "@/lib/products";
 import { CheckoutTrust } from "./checkout-trust";
-import { ProductDualGallery } from "./product-dual-gallery";
+import { ProductGallery } from "./product-gallery";
 import { OrderTimeline } from "./order-timeline";
 import { SizeChartModal } from "./size-chart-modal";
 import { TrustBadges } from "./trust-badges";
@@ -71,21 +69,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
 
   return (
     <>
-      {hasDualViews(product) ? (
-        <ProductDualGallery views={product.views} alt={product.name} />
-      ) : (
-        <div className="relative aspect-square overflow-hidden bg-neutral-100">
-          <Image
-            key={color.id}
-            src={color.image}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 512px) 100vw, 480px"
-            priority
-          />
-        </div>
-      )}
+      <ProductGallery
+        product={product}
+        productImage={color.image}
+        alt={product.name}
+      />
 
       <div className="mt-5 space-y-5">
         <div>
@@ -111,7 +99,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             </span>
             {onSale && (
               <span className="text-[10px] font-medium uppercase text-red-600">
-                15% off
+                50% off
               </span>
             )}
           </div>

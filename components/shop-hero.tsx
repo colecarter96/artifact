@@ -10,9 +10,9 @@ const features = [
 export function ShopHero() {
   return (
     <section className="-mx-4 mb-8 bg-white px-4 py-8 sm:px-6 sm:py-10">
-      <span className="inline-block bg-white px-3 py-1 text-[10px] font-semibold uppercase text-black sm:text-xs">
+      {/* <span className="inline-block bg-white px-3 py-1 text-[10px] font-semibold uppercase text-black sm:text-xs">
         Meme-grade cotton
-      </span>
+      </span> */}
 
       <h1 className="mt-5 text-[2.75rem] font-extrabold leading-[0.95] text-black sm:text-6xl">
         Shirts for
@@ -23,24 +23,20 @@ export function ShopHero() {
       </h1>
 
       <p className="mt-5 max-w-sm text-sm leading-relaxed text-black/80 sm:text-base">
-        Premium tees with stuff your therapist would find concerning. Shipped
+        Premium, 100% cotton, tees with stuff your therapist would find concerning. Shipped
         free, worldwide.
       </p>
 
-      <div className="mt-6 flex flex-wrap items-center gap-4 sm:gap-6">
+      {/* <div className="mt-6 flex flex-wrap items-center gap-4 sm:gap-6">
         <Link
           href="#shop"
           className="inline-flex items-center justify-center rounded-full border-2 border-black px-5 py-2.5 text-sm font-semibold text-black transition active:scale-[0.98]"
         >
           Shop all styles
         </Link>
-        {/* <p className="text-sm text-black">
-          <span className="font-bold">3,200+</span>
-          <br />
-          <span className="text-black/70">wearing their damage</span>
-        </p> */}
-      </div>
-
+        
+      </div> */}
+{/* 
       <ul className="mt-8 grid grid-cols-2 border-t border-black/15">
         {features.map(({ label, icon: Icon }, index) => (
           <li
@@ -53,7 +49,7 @@ export function ShopHero() {
             {label}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </section>
   );
 }

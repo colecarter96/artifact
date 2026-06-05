@@ -25,7 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
         ) : (
           <div className="relative aspect-square overflow-hidden bg-neutral-100">
             <Image
-              src={primary.gridImage}
+              src={primary.image}
               alt={product.name}
               fill
               className="object-cover"
@@ -40,7 +40,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </p>
           <div className="flex items-baseline gap-2 pt-0.5">
             {onSale && product.compareAtPrice != null && (
-              <span className="text-xs text-neutral-400 line-through">
+              <span className="text-xs text-neutral-400 line-through decoration-red-500">
                 {formatUSD(product.compareAtPrice)}
               </span>
             )}
