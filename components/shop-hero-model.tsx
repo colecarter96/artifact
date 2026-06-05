@@ -59,9 +59,9 @@ export function ShopHeroModel() {
           href={`/products/${slide.slug}`}
           className="group absolute inset-0 z-10 flex flex-col justify-end px-4 pb-14 pt-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
-          {/* <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
-            Shop the look
-          </p> */}
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
+            Free Shipping
+          </p>
           <h1 className="mt-1 max-w-[18ch] text-2xl font-extrabold leading-tight text-white sm:text-[1.65rem]">
             {slide.name}
           </h1>
