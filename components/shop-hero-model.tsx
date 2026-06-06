@@ -66,7 +66,7 @@ export function ShopHeroModel() {
             {slide.name}
           </h1>
           <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-white/90 transition group-hover:text-white">
-            View 
+            View
             <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
               →
             </span>

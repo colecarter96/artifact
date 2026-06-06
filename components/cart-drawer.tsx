@@ -4,8 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CheckoutTrust } from "@/components/checkout-trust";
+import { ProductPrice } from "@/components/product-price";
 import { useCart } from "@/context/cart-context";
 import { formatUSD } from "@/lib/format";
+import {
+  FREE_SHIPPING_PROMO_CODE,
+  getStoredFreeShippingPromo,
+  isFreeShippingPromo,
+} from "@/lib/shipping-promo";
 
 export function CartDrawer() {
   const {
@@ -18,6 +24,12 @@ export function CartDrawer() {
   } = useCart();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [promoCode, setPromoCode] = useState("");
+
+  useEffect(() => {
+    const stored = getStoredFreeShippingPromo();
+    if (stored) setPromoCode(stored);
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -47,6 +59,7 @@ export function CartDrawer() {
             size: line.size,
             quantity: line.quantity,
           })),
+          promoCode: promoCode.trim() || undefined,
         }),
       });
 
@@ -143,9 +156,10 @@ export function CartDrawer() {
                         : ""}
                       {line.size}
                     </p>
-                    <p className="mt-1 text-sm font-medium">
-                      {formatUSD(line.price)}
-                    </p>
+                    <ProductPrice
+                      cents={line.price}
+                      className="mt-1 text-sm font-medium text-red-600"
+                    />
                     <div className="mt-auto flex items-center justify-between pt-2">
                       <div className="flex items-center border border-neutral-200">
                         <button
@@ -186,12 +200,30 @@ export function CartDrawer() {
             </ul>
 
             <div className="border-t border-neutral-200 bg-neutral-50 p-4">
-              <div className="mb-1 flex justify-between text-sm">
+              <div className="mb-3 flex justify-between text-sm">
                 <span className="text-neutral-600">Subtotal</span>
-                <span className="font-semibold">{formatUSD(subtotal)}</span>
+                <ProductPrice
+                  cents={subtotal}
+                  className="font-semibold text-red-600"
+                />
               </div>
+              <label className="mb-1 block text-xs font-medium uppercase text-neutral-600">
+                Promo code
+              </label>
+              <input
+                type="text"
+                value={promoCode}
+                onChange={(event) => setPromoCode(event.target.value.toUpperCase())}
+                placeholder={FREE_SHIPPING_PROMO_CODE}
+                className="mb-2 w-full border border-neutral-200 px-3 py-2 text-sm uppercase outline-none focus:border-neutral-900"
+              />
+              {isFreeShippingPromo(promoCode) && (
+                <p className="mb-3 text-xs text-green-700">
+                  Free shipping code applied at checkout.
+                </p>
+              )}
               <p className="mb-3 text-xs text-neutral-500">
-                Free worldwide shipping. Taxes shown at checkout if applicable.
+                Shipping calculated at checkout. Taxes shown if applicable.
               </p>
               <div className="mb-4">
                 <CheckoutTrust />

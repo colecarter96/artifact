@@ -101,7 +101,7 @@ export const products: Product[] = [
     colors: singleColor("empath.jpg", "zoomed/empath.jpg", "Default", "#1a1a1a"),
     sizes: allSizes,
     featured: true,
-    tags: ["new"],
+    tags: [],
     sizeChart: defaultSizeChart,
   },
   {
@@ -121,7 +121,7 @@ export const products: Product[] = [
     ),
     sizes: allSizes,
     featured: true,
-    tags: ["new"],
+    tags: [],
     sizeChart: defaultSizeChart,
   },
   {
@@ -136,7 +136,7 @@ export const products: Product[] = [
     colors: singleColor("lesbian.jpg", "zoomed/lesbian.jpg", "Default", "#1a1a1a"),
     sizes: allSizes,
     featured: true,
-    tags: ["popular"],
+    tags: [],
     sizeChart: defaultSizeChart,
   },
   {
@@ -166,7 +166,7 @@ export const products: Product[] = [
     stripePriceId: "price_1TeIecAKB242hqM6RixF21Nf",
     colors: singleColor("puh.jpg", "zoomed/puh.jpg", "Default", "#e5e5e5"),
     sizes: allSizes,
-    tags: ["new"],
+    tags: [],
     sizeChart: defaultSizeChart,
   },
   {
@@ -196,7 +196,7 @@ export const products: Product[] = [
     ),
     sizes: allSizes,
     featured: true,
-    tags: ["new"],
+    tags: [],
     sizeChart: defaultSizeChart,
   },
 ];

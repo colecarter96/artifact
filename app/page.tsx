@@ -8,7 +8,7 @@ import { products } from "@/lib/products";
 export default function HomePage() {
   return (
     <div className="pt-4">
-      <ShopHeroModel />
+      {/* <ShopHeroModel /> */}
 
       <section id="shop" aria-label="All shirts">
         <div className="mb-4 flex items-end justify-between">
@@ -19,7 +19,7 @@ export default function HomePage() {
             {products.length} styles
           </span>
         </div>
-        <div className="grid grid-cols-1 gap-x-3 gap-y-8">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-8">
           {products.map((product, index) => (
             <ScrollReveal
               key={product.id}

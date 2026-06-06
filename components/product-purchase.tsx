@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useCart } from "@/context/cart-context";
-import { formatUSD } from "@/lib/format";
 import {
   isProductCheckoutReady,
   type ColorVariant,
@@ -11,6 +10,8 @@ import {
 } from "@/lib/products";
 import { CheckoutTrust } from "./checkout-trust";
 import { ProductGallery } from "./product-gallery";
+import { ProductPrice } from "./product-price";
+import { ProductReviews } from "./product-reviews";
 import { OrderTimeline } from "./order-timeline";
 import { SizeChartModal } from "./size-chart-modal";
 import { TrustBadges } from "./trust-badges";
@@ -27,9 +28,6 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   const [chartOpen, setChartOpen] = useState(false);
   const [addedFeedback, setAddedFeedback] = useState(false);
 
-  const onSale =
-    product.compareAtPrice != null &&
-    product.compareAtPrice > product.price;
   const checkoutReady = isProductCheckoutReady(product);
 
   function validateSize(): boolean {
@@ -86,25 +84,14 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             {product.name}
           </h1>
           <p className="mt-1 text-sm text-neutral-600">{product.tagline}</p>
-          <div className="mt-3 flex flex-wrap items-baseline gap-2">
-            {onSale && product.compareAtPrice != null && (
-              <span className="text-sm text-neutral-400 line-through">
-                {formatUSD(product.compareAtPrice)}
-              </span>
-            )}
-            <span
-              className={`text-xl font-semibold ${onSale ? "text-red-600" : ""}`}
-            >
-              {formatUSD(product.price)}
-            </span>
-            {onSale && (
-              <span className="text-[10px] font-medium uppercase text-red-600">
-                50% off
-              </span>
-            )}
+          <div className="mt-3">
+            <ProductPrice
+              cents={product.price}
+              className="text-xl font-semibold text-red-600"
+            />
           </div>
           <p className="mt-1 text-xs text-neutral-500">
-            Free worldwide shipping · USD · Includes tracking
+            Shipping at checkout · USD · Includes tracking
           </p>
           {!checkoutReady && (
             <p className="mt-2 text-xs text-neutral-600">
@@ -188,6 +175,8 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
         <p className="text-sm leading-relaxed text-neutral-600">
           {product.description}
         </p>
+
+        <ProductReviews slug={product.slug} />
 
         <OrderTimeline compact />
       </div>
