@@ -9,6 +9,7 @@ import {
   isValidEmail,
   markEmailPromoSeen,
 } from "@/lib/shipping-promo";
+import { identifyTikTokUser } from "@/lib/tiktok-pixel";
 
 export function EmailPromoModal() {
   const pathname = usePathname();
@@ -53,6 +54,11 @@ export function EmailPromoModal() {
       if (!response.ok) {
         throw new Error(data.error ?? "Could not save your email.");
       }
+
+      await identifyTikTokUser({
+        email,
+        externalId: email.trim().toLowerCase(),
+      });
 
       if (claimFreeShippingPromo(email)) {
         setClaimed(true);

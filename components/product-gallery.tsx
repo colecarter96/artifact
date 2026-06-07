@@ -25,6 +25,16 @@ function buildSlides(
 ): GallerySlide[] {
   const slides: GallerySlide[] = [];
 
+  const modelPhoto = getModelPhotoUrl(product.slug);
+  if (modelPhoto) {
+    slides.push({
+      key: "model",
+      label: "On model",
+      src: modelPhoto,
+      alt: `${alt} — on model`,
+    });
+  }
+
   if (hasDualViews(product)) {
     slides.push(
       {
@@ -46,16 +56,6 @@ function buildSlides(
       label: "Product",
       src: productImage,
       alt,
-    });
-  }
-
-  const modelPhoto = getModelPhotoUrl(product.slug);
-  if (modelPhoto) {
-    slides.push({
-      key: "model",
-      label: "On model",
-      src: modelPhoto,
-      alt: `${alt} — on model`,
     });
   }
 

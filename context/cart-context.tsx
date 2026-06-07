@@ -17,6 +17,7 @@ import {
   writeCartToStorage,
 } from "@/lib/cart";
 import type { Size } from "@/lib/products";
+import { trackAddToCart } from "@/lib/tiktok-pixel";
 
 type AddItemInput = {
   productId: string;
@@ -121,7 +122,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = useCallback(
     (input: AddItemInput) => {
+      const quantity = input.quantity ?? 1;
       upsertItem(input, false);
+      void trackAddToCart({
+        productId: input.productId,
+        name: input.name,
+        price: input.price,
+        quantity,
+      });
       pulseBag();
     },
     [upsertItem, pulseBag],

@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { OrderTimeline } from "@/components/order-timeline";
 import { useCart } from "@/context/cart-context";
+import { products, SALE_PRICE_CENTS } from "@/lib/products";
+import { trackOrderComplete } from "@/lib/tiktok-pixel";
 
 type OrderItem = {
   name: string;
@@ -15,7 +17,22 @@ type OrderItem = {
 type OrderDetails = {
   email: string | null;
   items: OrderItem[];
+  value?: number;
+  currency?: string;
+  tiktokEventId?: string;
 };
+
+function orderItemsForTikTok(items: OrderItem[]) {
+  return items.map((item) => {
+    const product = products.find((p) => p.name === item.name);
+    return {
+      productId: product?.id ?? item.name,
+      name: item.name,
+      price: product?.price ?? SALE_PRICE_CENTS,
+      quantity: item.quantity,
+    };
+  });
+}
 
 function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
@@ -53,6 +70,29 @@ function CheckoutSuccessContent() {
           if (!sessionStorage.getItem(clearedKey)) {
             clearCart();
             sessionStorage.setItem(clearedKey, "1");
+          }
+
+          const tiktokKey = `artifact-tiktok-purchase-${id}`;
+          if (!sessionStorage.getItem(tiktokKey) && data.items.length > 0) {
+            const tiktokItems = orderItemsForTikTok(data.items);
+            const value =
+              data.value ??
+              tiktokItems.reduce(
+                (sum, item) => sum + (item.price * item.quantity) / 100,
+                0,
+              );
+
+            void trackOrderComplete(
+              tiktokItems,
+              value,
+              data.currency ?? "USD",
+              {
+                email: data.email ?? undefined,
+                externalId: data.email ?? undefined,
+              },
+              data.tiktokEventId,
+            );
+            sessionStorage.setItem(tiktokKey, "1");
           }
         }
       } catch (err) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/context/cart-context";
 import {
   isProductCheckoutReady,
@@ -14,6 +14,7 @@ import { ProductPrice } from "./product-price";
 import { ProductReviews } from "./product-reviews";
 import { OrderTimeline } from "./order-timeline";
 import { SizeChartModal } from "./size-chart-modal";
+import { trackViewContent } from "@/lib/tiktok-pixel";
 import { TrustBadges } from "./trust-badges";
 
 type ProductPurchaseProps = {
@@ -29,6 +30,15 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   const [addedFeedback, setAddedFeedback] = useState(false);
 
   const checkoutReady = isProductCheckoutReady(product);
+
+  useEffect(() => {
+    void trackViewContent({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+    });
+  }, [product.id, product.name, product.price]);
 
   function validateSize(): boolean {
     if (!selectedSize) {
@@ -91,7 +101,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             />
           </div>
           <p className="mt-1 text-xs text-neutral-500">
-            Shipping at checkout · USD · Includes tracking
+            Free Shipping · Includes tracking
           </p>
           {!checkoutReady && (
             <p className="mt-2 text-xs text-neutral-600">

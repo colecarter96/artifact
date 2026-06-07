@@ -12,6 +12,7 @@ import {
   getStoredFreeShippingPromo,
   isFreeShippingPromo,
 } from "@/lib/shipping-promo";
+import { trackCheckoutStart } from "@/lib/tiktok-pixel";
 
 export function CartDrawer() {
   const {
@@ -68,6 +69,15 @@ export function CartDrawer() {
       if (!response.ok || !data.url) {
         throw new Error(data.error ?? "Checkout failed. Please try again.");
       }
+
+      void trackCheckoutStart(
+        items.map((line) => ({
+          productId: line.productId,
+          name: line.name,
+          price: line.price,
+          quantity: line.quantity,
+        })),
+      );
 
       window.location.href = data.url;
     } catch (error) {
