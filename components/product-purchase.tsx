@@ -90,17 +90,57 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
               {product.tags[0]}
             </p>
           )}
-          <h1 className="text-2xl font-semibold">
-            {product.name}
-          </h1>
-          <p className="mt-1 text-sm text-neutral-600">{product.tagline}</p>
-          <div className="mt-3">
+          <div className="flex items-baseline justify-between gap-3">
+            <h1 className="min-w-0 flex-1 text-lg font-semibold leading-snug sm:text-2xl">
+              {product.name}
+            </h1>
             <ProductPrice
               cents={product.price}
-              className="text-xl font-semibold text-red-600"
+              className="shrink-0 text-lg font-semibold text-red-600 sm:text-xl"
             />
           </div>
-          <p className="mt-1 text-xs text-neutral-500">
+          {product.tagline && (
+            <p className="mt-1 text-sm text-neutral-600">{product.tagline}</p>
+          )}
+
+          <div className="mt-4">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-xs font-medium uppercase">Size</span>
+              <button
+                type="button"
+                onClick={() => setChartOpen(true)}
+                className="text-xs text-neutral-600 underline underline-offset-2"
+              >
+                Size chart
+              </button>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+              {product.sizes.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => {
+                    setSelectedSize(s);
+                    setSizeError(false);
+                  }}
+                  className={`h-10 border text-sm font-medium transition ${
+                    selectedSize === s
+                      ? "border-brand bg-brand text-brand-foreground"
+                      : "border-neutral-200 hover:border-neutral-400"
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+            {sizeError && (
+              <p className="mt-2 text-xs text-red-600">
+                Select a size to continue
+              </p>
+            )}
+          </div>
+
+          <p className="mt-4 text-xs text-neutral-500">
             Free Shipping · Includes tracking
           </p>
           {!checkoutReady && (
@@ -143,44 +183,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
           </div>
         )}
 
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs font-medium uppercase">
-              Size
-            </span>
-            <button
-              type="button"
-              onClick={() => setChartOpen(true)}
-              className="text-xs text-neutral-600 underline underline-offset-2"
-            >
-              Size chart
-            </button>
-          </div>
-          <div className="grid grid-cols-5 gap-2">
-            {product.sizes.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => {
-                  setSelectedSize(s);
-                  setSizeError(false);
-                }}
-                className={`h-10 border text-sm font-medium transition ${
-                  selectedSize === s
-                    ? "border-brand bg-brand text-brand-foreground"
-                    : "border-neutral-200 hover:border-neutral-400"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-          {sizeError && (
-            <p className="mt-2 text-xs text-red-600">Select a size to continue</p>
-          )}
-        </div>
-
-        <TrustBadges compact />
+        {/* <TrustBadges compact /> */}
 
         <p className="text-sm leading-relaxed text-neutral-600">
           {product.description}
