@@ -25,7 +25,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   const { addItem, buyNow } = useCart();
   const [color, setColor] = useState<ColorVariant>(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
-  const [sizeError, setSizeError] = useState(false);
+  const [sizeFlash, setSizeFlash] = useState(false);
   const [chartOpen, setChartOpen] = useState(false);
   const [addedFeedback, setAddedFeedback] = useState(false);
 
@@ -40,12 +40,17 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
     });
   }, [product.id, product.name, product.price]);
 
+  useEffect(() => {
+    if (!sizeFlash) return;
+    const id = window.setTimeout(() => setSizeFlash(false), 2000);
+    return () => window.clearTimeout(id);
+  }, [sizeFlash]);
+
   function validateSize(): boolean {
     if (!selectedSize) {
-      setSizeError(true);
+      setSizeFlash(true);
       return false;
     }
-    setSizeError(false);
     return true;
   }
 
@@ -119,10 +124,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
                 <button
                   key={s}
                   type="button"
-                  onClick={() => {
-                    setSelectedSize(s);
-                    setSizeError(false);
-                  }}
+                  onClick={() => setSelectedSize(s)}
                   className={`h-10 border text-sm font-medium transition ${
                     selectedSize === s
                       ? "border-brand bg-brand text-brand-foreground"
@@ -133,11 +135,6 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
                 </button>
               ))}
             </div>
-            {sizeError && (
-              <p className="mt-2 text-xs text-red-600">
-                Select a size to continue
-              </p>
-            )}
           </div>
 
           <p className="mt-4 text-xs text-neutral-500">
@@ -218,6 +215,18 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
           </button>
         </div>
       </div>
+
+      {sizeFlash && (
+        <div
+          className="pointer-events-none fixed inset-0 z-[70] flex items-center justify-center px-6"
+          role="status"
+          aria-live="polite"
+        >
+          <p className="rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold tracking-wide text-white shadow-lg">
+            Please select a size
+          </p>
+        </div>
+      )}
 
       <SizeChartModal
         open={chartOpen}
