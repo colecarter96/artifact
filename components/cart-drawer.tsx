@@ -8,9 +8,8 @@ import { ProductPrice } from "@/components/product-price";
 import { useCart } from "@/context/cart-context";
 import { formatUSD } from "@/lib/format";
 import {
+  ensureFreeShippingPromo,
   FREE_SHIPPING_PROMO_CODE,
-  getStoredFreeShippingPromo,
-  isFreeShippingPromo,
 } from "@/lib/shipping-promo";
 import { trackCheckoutStart } from "@/lib/tiktok-pixel";
 
@@ -25,12 +24,11 @@ export function CartDrawer() {
   } = useCart();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const [promoCode, setPromoCode] = useState("");
+  const promoCode = FREE_SHIPPING_PROMO_CODE;
 
   useEffect(() => {
-    const stored = getStoredFreeShippingPromo();
-    if (stored) setPromoCode(stored);
-  }, [isOpen]);
+    ensureFreeShippingPromo();
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -217,23 +215,17 @@ export function CartDrawer() {
                   className="font-semibold text-red-600"
                 />
               </div>
-              <label className="mb-1 block text-xs font-medium uppercase text-neutral-600">
-                Promo code
-              </label>
-              <input
-                type="text"
-                value={promoCode}
-                onChange={(event) => setPromoCode(event.target.value.toUpperCase())}
-                placeholder={FREE_SHIPPING_PROMO_CODE}
-                className="mb-2 w-full border border-neutral-200 px-3 py-2 text-sm uppercase outline-none focus:border-neutral-900"
-              />
-              {isFreeShippingPromo(promoCode) && (
-                <p className="mb-3 text-xs text-green-700">
-                  Free shipping code applied at checkout.
+              <div className="mb-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2.5">
+                <p className="text-[10px] font-semibold uppercase text-green-800">
+                  Free shipping
                 </p>
-              )}
+                <p className="mt-0.5 text-xs text-green-700">
+                  Code <span className="font-semibold">{promoCode}</span> applied
+                  automatically at checkout.
+                </p>
+              </div>
               <p className="mb-3 text-xs text-neutral-500">
-                Shipping calculated at checkout. Taxes shown if applicable.
+                Free shipping included. Taxes shown at checkout if applicable.
               </p>
               <div className="mb-4">
                 <CheckoutTrust />

@@ -148,7 +148,7 @@ export const products: Product[] = [
     compareAtPrice: LIST_PRICE_CENTS,
     price: SALE_PRICE_CENTS,
     stripePriceId: "price_1TeIgOAKB242hqM6nHGVwoTu",
-    colors: singleColor("genitals.jpg", "zoomed/genitals.jpg", "Default", "#f5f5f5"),
+    colors: singleColor("genitals2.jpg", "zoomed/genitals.jpg", "Default", "#f5f5f5"),
     sizes: allSizes,
     tags: ["limited"],
     sizeChart: defaultSizeChart,

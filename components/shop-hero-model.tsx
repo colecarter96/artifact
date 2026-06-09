@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { heroSlides } from "@/lib/hero-slides";
+import { getModelPhotoImageProps } from "@/lib/model-photos";
 
 const ROTATE_MS = 2000;
 
@@ -44,7 +45,7 @@ export function ShopHeroModel() {
                 priority={i === 0}
                 quality={92}
                 sizes="(max-width: 512px) 100vw, 512px"
-                className="object-cover object-center"
+                {...getModelPhotoImageProps(s.slug)}
               />
             </div>
           );

@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { getModelPhotoUrl } from "@/lib/model-photos";
+import {
+  getModelPhotoImageProps,
+  getModelPhotoUrl,
+} from "@/lib/model-photos";
 import { hasDualViews, type Product } from "@/lib/products";
 
 type GallerySlide = {
@@ -118,13 +121,15 @@ export function ProductGallery({
         {slides.map((slide, index) => (
           <div
             key={slide.key}
-            className="relative aspect-square w-full shrink-0 snap-center snap-always"
+            className="relative aspect-square w-full shrink-0 snap-center snap-always overflow-hidden"
           >
             <Image
               src={slide.src}
               alt={slide.alt}
               fill
-              className="object-cover"
+              {...(slide.key === "model"
+                ? getModelPhotoImageProps(product.slug)
+                : { className: "object-cover object-center" })}
               sizes="(max-width: 512px) 100vw, 480px"
               priority={index === 0}
             />

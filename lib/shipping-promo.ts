@@ -34,6 +34,14 @@ export function getStoredFreeShippingPromo(): string | null {
   return localStorage.getItem(FREE_SHIPPING_PROMO_KEY);
 }
 
+/** Everyone gets free shipping — persist the code for checkout UI. */
+export function ensureFreeShippingPromo(): string {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(FREE_SHIPPING_PROMO_KEY, FREE_SHIPPING_PROMO_CODE);
+  }
+  return FREE_SHIPPING_PROMO_CODE;
+}
+
 export function isFreeShippingPromo(code: string | null | undefined): boolean {
   if (!code) return false;
   return code.trim().toUpperCase() === FREE_SHIPPING_PROMO_CODE.toUpperCase();

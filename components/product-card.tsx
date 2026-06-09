@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProductPrice } from "@/components/product-price";
-import { getModelPhotoUrl } from "@/lib/model-photos";
+import {
+  getModelPhotoImageProps,
+  getModelPhotoUrl,
+} from "@/lib/model-photos";
 import { type Product } from "@/lib/products";
 
 type ProductCardProps = {
@@ -19,7 +22,9 @@ export function ProductCard({ product }: ProductCardProps) {
             src={modelPhoto ?? product.colors[0].image}
             alt={product.name}
             fill
-            className="object-cover"
+            {...(modelPhoto
+              ? getModelPhotoImageProps(product.slug)
+              : { className: "object-cover object-center" })}
             sizes="(max-width: 512px) 50vw, 240px"
           />
         </div>

@@ -3,7 +3,6 @@ import { buildCheckoutMetadata } from "@/lib/checkout-metadata";
 import type { CartLine } from "@/lib/cart";
 import { isProductCheckoutReady, products } from "@/lib/products";
 import { SHIPPING_COUNTRIES } from "@/lib/shipping-countries";
-import { isFreeShippingPromo } from "@/lib/shipping-promo";
 import { getStripe } from "@/lib/stripe";
 
 type CheckoutItem = Pick<
@@ -13,7 +12,6 @@ type CheckoutItem = Pick<
 
 type CheckoutRequest = {
   items: CheckoutItem[];
-  promoCode?: string;
 };
 
 function getOrigin(request: Request): string {
@@ -90,10 +88,9 @@ export async function POST(request: Request) {
     const stripe = getStripe();
     const origin = getOrigin(request);
 
-    const shippingRateId = process.env.STRIPE_SHIPPING_RATE_ID;
     const freeShippingRateId = process.env.STRIPE_FREE_SHIPPING_RATE_ID;
-    const useFreeShipping =
-      isFreeShippingPromo(body.promoCode) && Boolean(freeShippingRateId);
+    const shippingRateId =
+      freeShippingRateId ?? process.env.STRIPE_SHIPPING_RATE_ID;
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -106,13 +103,7 @@ export async function POST(request: Request) {
       },
       ...(shippingRateId
         ? {
-            shipping_options: [
-              {
-                shipping_rate: useFreeShipping
-                  ? freeShippingRateId!
-                  : shippingRateId,
-              },
-            ],
+            shipping_options: [{ shipping_rate: shippingRateId }],
           }
         : {}),
       allow_promotion_codes: true,
