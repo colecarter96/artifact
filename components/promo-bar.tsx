@@ -32,7 +32,7 @@ export function PromoBar() {
 
   return (
     <div
-      className="bg-pink-400 text-xs font-medium tracking-normal text-black sm:text-sm"
+      className="bg-brand text-xs font-medium tracking-normal text-brand-foreground sm:text-sm"
       role="region"
       aria-label="Store highlights"
     >

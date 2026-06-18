@@ -8,8 +8,8 @@
 @theme {
   --color-background: #ffffff;
   --color-foreground: #171717;
-  --color-brand: var(--color-pink-400);
-  --color-brand-foreground: #171717;
+  --color-brand: #171717;
+  --color-brand-foreground: #ffffff;
   --font-sans: var(--font-comic-helvetic), system-ui, sans-serif;
 }
 

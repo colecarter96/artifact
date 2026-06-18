@@ -87,7 +87,7 @@ export function EmailPromoModal() {
       >
         {claimed ? (
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase text-pink-400">
+            <p className="text-xs font-semibold uppercase text-black">
               You&apos;re in
             </p>
             <h2
@@ -99,7 +99,7 @@ export function EmailPromoModal() {
             <p className="mt-2 text-sm text-neutral-600">
               Use this code at checkout:
             </p>
-            <p className="mt-4 rounded-xl bg-pink-400 px-4 py-3 text-lg font-extrabold tracking-widest text-black">
+            <p className="mt-4 rounded-xl bg-black px-4 py-3 text-lg font-extrabold tracking-widest text-white">
               {FREE_SHIPPING_PROMO_CODE}
             </p>
             <p className="mt-3 text-xs text-neutral-500">
@@ -123,7 +123,7 @@ export function EmailPromoModal() {
             >
               ✕
             </button>
-            <p className="text-xs font-semibold uppercase text-pink-400">
+            <p className="text-xs font-semibold uppercase text-black">
               Welcome offer
             </p>
             <h2
@@ -149,7 +149,7 @@ export function EmailPromoModal() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-full bg-pink-400 py-3 text-sm font-semibold text-black disabled:opacity-60"
+                className="w-full rounded-full bg-black py-3 text-sm font-semibold text-white disabled:opacity-60"
               >
                 {submitting ? "Saving…" : "Get my code"}
               </button>

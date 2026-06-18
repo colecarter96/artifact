@@ -84,7 +84,7 @@ export function ShopHeroModel() {
               onClick={() => goTo(i)}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 i === index
-                  ? "w-6 bg-pink-400"
+                  ? "w-6 bg-black"
                   : "w-1.5 bg-white/40 hover:bg-white/70"
               }`}
             />

@@ -12,14 +12,14 @@ export default function HomePage() {
 
       <section id="shop" aria-label="All shirts">
         <div className="mb-4 flex items-end justify-between">
-          <h2 className="text-sm font-semibold uppercase">
+          <h2 className="text-xs font-semibold uppercase">
             Shop all
           </h2>
           <span className="text-xs text-neutral-500">
             {products.length} styles
           </span>
         </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-8">
+        <div className="grid grid-cols-2 gap-x-1 gap-y-5">
           {products.map((product, index) => (
             <ScrollReveal
               key={product.id}
@@ -41,7 +41,7 @@ export default function HomePage() {
         </ScrollReveal>
       </section>
 
-      <section className="mt-10 bg-neutral-900 px-5 py-6 text-center text-white">
+      <section className="-mx-3 mt-10 bg-neutral-900 px-3 py-6 text-center text-white">
         <p className="text-xs font-medium uppercase text-neutral-400">
           Limited launch offer
         </p>

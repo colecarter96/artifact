@@ -10,7 +10,7 @@ type ProductReviewsProps = {
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <span className="inline-flex gap-0.5 text-pink-400" aria-hidden>
+    <span className="inline-flex gap-0.5 text-black" aria-hidden>
       {Array.from({ length: 5 }, (_, index) => (
         <span key={index}>{index < rating ? "★" : "☆"}</span>
       ))}
@@ -41,7 +41,7 @@ export function ProductReviews({ slug }: ProductReviewsProps) {
   const average = getAverageRating(reviews);
 
   return (
-    <section className="border-t border-neutral-200 pt-5">
+    <section className="border-t border-neutral-200 pt-4">
       <div className="flex items-end justify-between gap-3">
         <h2 className="text-sm font-semibold uppercase">Reviews</h2>
         <p className="text-xs text-neutral-500">

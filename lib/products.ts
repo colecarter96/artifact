@@ -90,6 +90,51 @@ function singleColor(
 
 export const products: Product[] = [
   {
+    id: "usflag",
+    slug: "usflag",
+    name: "US World Cup",
+    tagline: "",
+    description: PRODUCT_DESCRIPTION,
+    compareAtPrice: LIST_PRICE_CENTS,
+    price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TeIfYAKB242hqM6AMTlv75a",
+    colors: singleColor("usflag.png", "usflag.png", "Default", "#1a1a1a"),
+    sizes: allSizes,
+    featured: true,
+    tags: [],
+    sizeChart: defaultSizeChart,
+  },
+  {
+    id: "itscalledsoccerb",
+    slug: "soccerb",
+    name: "It's Called Soccer",
+    tagline: "",
+    description: PRODUCT_DESCRIPTION,
+    compareAtPrice: LIST_PRICE_CENTS,
+    price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TeIfYAKB242hqM6AMTlv75a",
+    colors: singleColor("icsbGirl.png", "icsbGirl.png", "Default", "#1a1a1a"),
+    sizes: allSizes,
+    featured: true,
+    tags: [],
+    sizeChart: defaultSizeChart,
+  },
+  {
+    id: "itscalledsoccer",
+    slug: "soccerrwb",
+    name: "It's Called Soccer RWB",
+    tagline: "",
+    description: PRODUCT_DESCRIPTION,
+    compareAtPrice: LIST_PRICE_CENTS,
+    price: SALE_PRICE_CENTS,
+    stripePriceId: "price_1TeIfYAKB242hqM6AMTlv75a",
+    colors: singleColor("icsrwbGirl.png", "icsrwbGirl.png", "Default", "#1a1a1a"),
+    sizes: allSizes,
+    featured: true,
+    tags: [],
+    sizeChart: defaultSizeChart,
+  },
+  {
     id: "empath",
     slug: "empath",
     name: "I'm an Empath",
@@ -211,4 +256,23 @@ export function getAllProductSlugs(): string[] {
 
 export function isProductCheckoutReady(product: Product): boolean {
   return Boolean(product.stripePriceId);
+}
+
+/** Vertical crop anchor for shirt images (% from top). Lower = more top visible. */
+const PRODUCT_IMAGE_OBJECT_POSITION_Y: Partial<Record<string, number>> = {
+  soccerrwb: 0,
+};
+
+export function getProductImageProps(slug: string): {
+  className: string;
+  style?: { objectPosition: string };
+} {
+  const y = PRODUCT_IMAGE_OBJECT_POSITION_Y[slug];
+  if (y !== undefined) {
+    return {
+      className: "object-cover",
+      style: { objectPosition: `center ${y}%` },
+    };
+  }
+  return { className: "object-cover object-center" };
 }

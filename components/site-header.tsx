@@ -9,15 +9,17 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white ">
-      <div className="mx-auto flex h-14 max-w-lg items-center justify-between px-4">
-        <Link href="/" className="flex items-center" aria-label="Artifact home">
+      <div className="mx-auto flex h-14 max-w-lg items-center justify-between px-3">
+        <Link href="/" className="flex items-center" aria-label="Appropriate home">
           <Image
             src="/logos/logo.jpg"
-            alt="Artifact"
-            width={477}
+            alt="Appropriate"
+            width={360}
             height={100}
-            className="h-8 w-auto"
+            className="h-8 w-auto max-w-[70vw] object-contain object-left"
+            style={{ width: "auto", height: "2rem" }}
             priority
+            unoptimized
           />
         </Link>
         <button

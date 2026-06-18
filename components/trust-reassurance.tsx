@@ -10,28 +10,28 @@ type TrustReassuranceProps = {
 export function TrustReassurance({ showLinks = true }: TrustReassuranceProps) {
   return (
     <section
-      className="rounded-2xl bg-pink-400 p-5 sm:p-6"
+      className="rounded-2xl bg-black p-5 sm:p-6"
       aria-label="Why shop with Artifact"
     >
-      <h2 className="text-xl font-extrabold text-black sm:text-4xl">
+      <h2 className="text-xl font-extrabold text-white sm:text-4xl">
         Shop with confidence
       </h2>
 
-      <ul className="mt-6 divide-y divide-black/15">
+      <ul className="mt-6 divide-y divide-white/15">
         {reassurancePoints.map((point, index) => {
           const Icon = icons[index];
 
           return (
             <li key={point.title} className="flex gap-4 py-6 first:pt-0 last:pb-0">
               <span
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-black text-blue-200"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-black"
                 aria-hidden
               >
                 <Icon />
               </span>
               <div className="pt-0.5">
-                <p className="text-sm font-bold text-black">{point.title}</p>
-                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                <p className="text-sm font-bold text-white">{point.title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-300">
                   {point.detail}
                 </p>
               </div>
@@ -41,28 +41,28 @@ export function TrustReassurance({ showLinks = true }: TrustReassuranceProps) {
       </ul>
 
       {showLinks && (
-        <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-black/15 pt-6 text-xs">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-white/15 pt-6 text-xs">
           <Link
             href="/shipping"
-            className="text-black/70 underline underline-offset-2 hover:text-black"
+            className="text-white/70 underline underline-offset-2 hover:text-white"
           >
             Shipping & delivery
           </Link>
           <Link
             href="/returns"
-            className="text-black/70 underline underline-offset-2 hover:text-black"
+            className="text-white/70 underline underline-offset-2 hover:text-white"
           >
             Returns
           </Link>
           <Link
             href="/faq"
-            className="text-black/70 underline underline-offset-2 hover:text-black"
+            className="text-white/70 underline underline-offset-2 hover:text-white"
           >
             FAQ
           </Link>
           <a
             href={`mailto:${SUPPORT_EMAIL}`}
-            className="text-black/70 underline underline-offset-2 hover:text-black"
+            className="text-white/70 underline underline-offset-2 hover:text-white"
           >
             Contact
           </a>

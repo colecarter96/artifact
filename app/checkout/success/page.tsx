@@ -117,45 +117,45 @@ function CheckoutSuccessContent() {
 
   return (
     <div className="py-6">
-      <div className="rounded-2xl bg-pink-400 p-5 sm:p-6">
-        <p className="text-xs font-medium uppercase text-black/60">
+      <div className="rounded-2xl bg-black p-5 sm:p-6">
+        <p className="text-xs font-medium uppercase text-white/60">
           Order confirmed
         </p>
-        <h1 className="mt-2 text-xl font-extrabold text-black sm:text-4xl">
+        <h1 className="mt-2 text-xl font-extrabold text-white sm:text-4xl">
           You&apos;re all set
         </h1>
-        <p className="mt-2 text-sm leading-relaxed text-black/80">
+        <p className="mt-2 text-sm leading-relaxed text-white/80">
           {order?.email
             ? `A confirmation email is on its way to ${order.email}.`
             : "You'll receive a confirmation email shortly."}
         </p>
 
         {loading && (
-          <p className="mt-6 text-sm text-black/70">Loading your order…</p>
+          <p className="mt-6 text-sm text-white/70">Loading your order…</p>
         )}
 
         {error && (
-          <p className="mt-6 text-sm text-black/80">
+          <p className="mt-6 text-sm text-white/80">
             Your payment went through. {error}
           </p>
         )}
 
         {order && order.items.length > 0 && (
-          <div className="mt-6 border-t border-black/15 pt-6">
-            <p className="text-xs font-medium uppercase text-black/60">
+          <div className="mt-6 border-t border-white/15 pt-6">
+            <p className="text-xs font-medium uppercase text-white/60">
               Your items
             </p>
             <ul className="mt-3 space-y-2">
               {order.items.map((item) => (
                 <li
                   key={`${item.name}-${item.size}`}
-                  className="flex items-baseline justify-between gap-4 text-sm text-black"
+                  className="flex items-baseline justify-between gap-4 text-sm text-white"
                 >
                   <span className="font-bold">
                     {item.name}
                     {item.quantity > 1 ? ` ×${item.quantity}` : ""}
                   </span>
-                  <span className="shrink-0 text-black/70">Size {item.size}</span>
+                  <span className="shrink-0 text-white/70">Size {item.size}</span>
                 </li>
               ))}
             </ul>

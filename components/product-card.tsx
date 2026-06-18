@@ -5,7 +5,7 @@ import {
   getModelPhotoImageProps,
   getModelPhotoUrl,
 } from "@/lib/model-photos";
-import { type Product } from "@/lib/products";
+import { getProductImageProps, type Product } from "@/lib/products";
 
 type ProductCardProps = {
   product: Product;
@@ -24,17 +24,20 @@ export function ProductCard({ product }: ProductCardProps) {
             fill
             {...(modelPhoto
               ? getModelPhotoImageProps(product.slug)
-              : { className: "object-cover object-center" })}
+              : getProductImageProps(product.slug))}
             sizes="(max-width: 512px) 50vw, 240px"
           />
         </div>
-        <div className="mt-2.5 space-y-0.5">
-          <h2 className="text-sm font-medium leading-snug">{product.name}</h2>
-          <p className="text-xs text-neutral-500 line-clamp-1">
+        <div className="mt-1.5 space-y-0">
+          <h2 className="text-xs font-medium leading-snug">{product.name}</h2>
+          <p className="text-[11px] text-neutral-500 line-clamp-1">
             {product.tagline}
           </p>
-          <div className="flex items-baseline gap-2 pt-0.5">
-            <ProductPrice cents={product.price} />
+          <div className="flex items-baseline gap-2">
+            <ProductPrice
+              cents={product.price}
+              className="text-xs font-light text-gray-700"
+            />
           </div>
           {product.colors.length > 1 && (
             <p className="text-[10px] text-neutral-400">

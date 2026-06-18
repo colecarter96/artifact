@@ -29,7 +29,7 @@ export function OrderTimeline({ compact = false }: OrderTimelineProps) {
         {orderSteps.map((step, index) => (
           <li key={step.title} className="flex gap-4">
             <span
-              className={`flex shrink-0 items-center justify-center rounded-full bg-pink-400 font-extrabold text-black ${
+              className={`flex shrink-0 items-center justify-center rounded-full bg-black font-extrabold text-white ${
                 compact ? "h-7 w-7 text-sm" : "h-10 w-10 text-base"
               }`}
               aria-hidden

@@ -45,7 +45,7 @@ export function ShopHero() {
               index % 2 === 0 ? "border-r border-black/15" : ""
             } ${index < 2 ? "border-b border-black/15" : ""}`}
           >
-            <Icon className="shrink-0 text-pink-400" />
+            <Icon className="shrink-0 text-black" />
             {label}
           </li>
         ))}

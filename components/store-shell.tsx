@@ -17,7 +17,7 @@ export function StoreShell({ children }: { children: React.ReactNode }) {
     <>
       <PromoBar />
       <SiteHeader />
-      <main className="mx-auto w-full max-w-lg flex-1 px-4 pb-6">{children}</main>
+      <main className="mx-auto w-full max-w-lg flex-1 px-3 pb-6">{children}</main>
       <SiteFooter />
       <CartDrawer />
       <EmailPromoModal />

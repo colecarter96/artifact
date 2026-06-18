@@ -6,7 +6,7 @@ import {
   getModelPhotoImageProps,
   getModelPhotoUrl,
 } from "@/lib/model-photos";
-import { hasDualViews, type Product } from "@/lib/products";
+import { getProductImageProps, hasDualViews, type Product } from "@/lib/products";
 
 type GallerySlide = {
   key: string;
@@ -96,13 +96,17 @@ export function ProductGallery({
 
   if (slides.length === 1) {
     const slide = slides[0];
+    const imageProps =
+      slide.key === "model"
+        ? getModelPhotoImageProps(product.slug)
+        : getProductImageProps(product.slug);
     return (
       <div className="relative aspect-square overflow-hidden bg-neutral-100">
         <Image
           src={slide.src}
           alt={slide.alt}
           fill
-          className="object-cover"
+          {...imageProps}
           sizes="(max-width: 512px) 100vw, 480px"
           priority
         />
@@ -129,7 +133,7 @@ export function ProductGallery({
               fill
               {...(slide.key === "model"
                 ? getModelPhotoImageProps(product.slug)
-                : { className: "object-cover object-center" })}
+                : getProductImageProps(product.slug))}
               sizes="(max-width: 512px) 100vw, 480px"
               priority={index === 0}
             />
@@ -147,7 +151,7 @@ export function ProductGallery({
             onClick={() => scrollToIndex(index)}
             className={`h-1.5 rounded-full transition-all duration-300 ${
               activeIndex === index
-                ? "w-6 bg-pink-400"
+                ? "w-6 bg-black"
                 : "w-1.5 bg-neutral-300 hover:bg-neutral-400"
             }`}
           />

@@ -8,7 +8,6 @@ import {
   type Product,
   type Size,
 } from "@/lib/products";
-import { CheckoutTrust } from "./checkout-trust";
 import { ProductGallery } from "./product-gallery";
 import { ProductPrice } from "./product-price";
 import { ProductReviews } from "./product-reviews";
@@ -101,7 +100,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             </h1>
             <ProductPrice
               cents={product.price}
-              className="shrink-0 text-lg font-semibold text-red-600 sm:text-xl"
+              className="shrink-0 text-lg font-light text-gray-700 sm:text-xl"
             />
           </div>
           {product.tagline && (
@@ -186,19 +185,17 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
           {product.description}
         </p>
 
-        <ProductReviews slug={product.slug} />
-
-        <OrderTimeline compact />
+        <div className="space-y-4">
+          <ProductReviews slug={product.slug} />
+          <OrderTimeline compact />
+        </div>
       </div>
 
       {/* Spacer for sticky bar */}
-      <div className="h-36" aria-hidden />
+      <div className="h-24" aria-hidden />
 
       <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-neutral-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90">
-        <div className="mx-auto max-w-lg px-3 pt-2">
-          <CheckoutTrust />
-        </div>
-        <div className="mx-auto flex max-w-lg gap-2 p-3 pt-2">
+        <div className="mx-auto flex max-w-lg gap-2 p-3">
           <button
             type="button"
             onClick={handleAddToBag}

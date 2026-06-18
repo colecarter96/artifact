@@ -4,7 +4,7 @@ export function CheckoutTrust() {
       className="space-y-1.5 text-[11px] text-neutral-500"
       aria-label="Checkout reassurance"
     >
-      <li className="flex items-start gap-2">
+      {/* <li className="flex items-start gap-2">
         <span className="text-brand" aria-hidden>
           ✓
         </span>
@@ -15,7 +15,7 @@ export function CheckoutTrust() {
           ✓
         </span>
         <span>Secure checkout · Stripe</span>
-      </li>
+      </li> */}
     </ul>
   );
 }
