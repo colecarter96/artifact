@@ -37,6 +37,8 @@ export type Product = {
   stripePriceId?: string;
   /** Front/back graphics — grid auto-flips, product page swipe gallery */
   views?: DualViews;
+  /** Second product photo in the swipe gallery (e.g. flat lay after lifestyle shot) */
+  secondaryImage?: string;
   colors: ColorVariant[];
   sizes: Size[];
   featured?: boolean;
@@ -63,6 +65,8 @@ const allSizes: Size[] = ["S", "M", "L", "XL", "2XL"];
 /** $25 list price, 15% off */
 export const LIST_PRICE_CENTS = 4250;
 export const SALE_PRICE_CENTS = 2125;
+/** World Cup + It's Called Soccer shirts */
+export const SOCCER_SHIRT_PRICE_CENTS = 1950;
 
 export const PRODUCT_DESCRIPTION =
   "100% cotton shirts for people with something wrong with them. In a good way.";
@@ -96,9 +100,10 @@ export const products: Product[] = [
     tagline: "",
     description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
-    price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TeIfYAKB242hqM6AMTlv75a",
-    colors: singleColor("usflag.png", "usflag.png", "Default", "#1a1a1a"),
+    price: SOCCER_SHIRT_PRICE_CENTS,
+    stripePriceId: "price_1TjrJ5AKB242hqM6VrhUU9TG",
+    colors: singleColor("usaflagBro.jpeg", "usaflagBro.jpeg", "Default", "#1a1a1a"),
+    secondaryImage: image("usaflag.png"),
     sizes: allSizes,
     featured: true,
     tags: [],
@@ -111,9 +116,10 @@ export const products: Product[] = [
     tagline: "",
     description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
-    price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TeIfYAKB242hqM6AMTlv75a",
-    colors: singleColor("icsbGirl.png", "icsbGirl.png", "Default", "#1a1a1a"),
+    price: SOCCER_SHIRT_PRICE_CENTS,
+    stripePriceId: "price_1TjrIiAKB242hqM6y0NX2LWG",
+    colors: singleColor("icsbBro.jpeg", "icsbBro.jpeg", "Default", "#1a1a1a"),
+    secondaryImage: image("icsb.png"),
     sizes: allSizes,
     featured: true,
     tags: [],
@@ -126,9 +132,10 @@ export const products: Product[] = [
     tagline: "",
     description: PRODUCT_DESCRIPTION,
     compareAtPrice: LIST_PRICE_CENTS,
-    price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TeIfYAKB242hqM6AMTlv75a",
-    colors: singleColor("icsrwbGirl.png", "icsrwbGirl.png", "Default", "#1a1a1a"),
+    price: SOCCER_SHIRT_PRICE_CENTS,
+    stripePriceId: "price_1TjrIJAKB242hqM6nKixE9De",
+    colors: singleColor("icsrwbGirl2.jpeg", "icsrwbGirl2.jpeg", "Default", "#1a1a1a"),
+    secondaryImage: image("icsrwb.png"),
     sizes: allSizes,
     featured: true,
     tags: [],
@@ -251,7 +258,7 @@ export function getProductBySlug(slug: string): Product | undefined {
 }
 
 export function getAllProductSlugs(): string[] {
-  return products.map((p) => p.slug);
+  return products.map((p) => p.slug).filter(Boolean);
 }
 
 export function isProductCheckoutReady(product: Product): boolean {
@@ -261,6 +268,8 @@ export function isProductCheckoutReady(product: Product): boolean {
 /** Vertical crop anchor for shirt images (% from top). Lower = more top visible. */
 const PRODUCT_IMAGE_OBJECT_POSITION_Y: Partial<Record<string, number>> = {
   soccerrwb: 0,
+  soccerb: 0,
+  usflag: 0,
 };
 
 export function getProductImageProps(slug: string): {

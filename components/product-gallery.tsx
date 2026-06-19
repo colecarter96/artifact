@@ -21,6 +21,12 @@ type ProductGalleryProps = {
   alt: string;
 };
 
+function getSlideImageProps(product: Product, slideKey: string) {
+  if (slideKey === "model") return getModelPhotoImageProps(product.slug);
+  if (slideKey === "product") return getProductImageProps(product.slug);
+  return { className: "object-cover object-center" };
+}
+
 function buildSlides(
   product: Product,
   productImage: string,
@@ -60,6 +66,14 @@ function buildSlides(
       src: productImage,
       alt,
     });
+    if (product.secondaryImage) {
+      slides.push({
+        key: "product-alt",
+        label: "Product detail",
+        src: product.secondaryImage,
+        alt: `${alt} — detail`,
+      });
+    }
   }
 
   return slides;
@@ -96,10 +110,7 @@ export function ProductGallery({
 
   if (slides.length === 1) {
     const slide = slides[0];
-    const imageProps =
-      slide.key === "model"
-        ? getModelPhotoImageProps(product.slug)
-        : getProductImageProps(product.slug);
+    const imageProps = getSlideImageProps(product, slide.key);
     return (
       <div className="relative aspect-square overflow-hidden bg-neutral-100">
         <Image
@@ -131,9 +142,7 @@ export function ProductGallery({
               src={slide.src}
               alt={slide.alt}
               fill
-              {...(slide.key === "model"
-                ? getModelPhotoImageProps(product.slug)
-                : getProductImageProps(product.slug))}
+              {...getSlideImageProps(product, slide.key)}
               sizes="(max-width: 512px) 100vw, 480px"
               priority={index === 0}
             />
