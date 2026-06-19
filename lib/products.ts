@@ -221,36 +221,36 @@ export const products: Product[] = [
     tags: [],
     sizeChart: defaultSizeChart,
   },
-  {
-    id: "day-ones",
-    slug: "day-ones",
-    name: "Switch Up on my Day Ones",
-    tagline: "From the jump",
-    description: PRODUCT_DESCRIPTION,
-    compareAtPrice: LIST_PRICE_CENTS,
-    price: SALE_PRICE_CENTS,
-    stripePriceId: "price_1TeIfAAKB242hqM6uZXeK1oZ",
-    views: {
-      front: {
-        full: image("dayOnesFront.jpg"),
-        grid: image("zoomed/switch.jpg"),
-      },
-      back: {
-        full: image("dayOnesBack.jpg"),
-        grid: image("zoomed/switchBack.jpg"),
-      },
-    },
-    colors: singleColor(
-      "dayOnesFront.jpg",
-      "zoomed/switch.jpg",
-      "Default",
-      "#d4d4d4",
-    ),
-    sizes: allSizes,
-    featured: true,
-    tags: [],
-    sizeChart: defaultSizeChart,
-  },
+  // {
+  //   id: "day-ones",
+  //   slug: "day-ones",
+  //   name: "Switch Up on my Day Ones",
+  //   tagline: "From the jump",
+  //   description: PRODUCT_DESCRIPTION,
+  //   compareAtPrice: LIST_PRICE_CENTS,
+  //   price: SALE_PRICE_CENTS,
+  //   stripePriceId: "price_1TeIfAAKB242hqM6uZXeK1oZ",
+  //   views: {
+  //     front: {
+  //       full: image("dayOnesFront.jpg"),
+  //       grid: image("zoomed/switch.jpg"),
+  //     },
+  //     back: {
+  //       full: image("dayOnesBack.jpg"),
+  //       grid: image("zoomed/switchBack.jpg"),
+  //     },
+  //   },
+  //   colors: singleColor(
+  //     "dayOnesFront.jpg",
+  //     "zoomed/switch.jpg",
+  //     "Default",
+  //     "#d4d4d4",
+  //   ),
+  //   sizes: allSizes,
+  //   featured: true,
+  //   tags: [],
+  //   sizeChart: defaultSizeChart,
+  // },
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {
