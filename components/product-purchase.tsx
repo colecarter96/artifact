@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/cart-context";
 import {
+  isOneSizeProduct,
   isProductCheckoutReady,
+  ONE_SIZE,
   type ColorVariant,
   type Product,
   type Size,
@@ -28,6 +30,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   const [chartOpen, setChartOpen] = useState(false);
   const [addedFeedback, setAddedFeedback] = useState(false);
 
+  const oneSize = isOneSizeProduct(product);
   const checkoutReady = isProductCheckoutReady(product);
 
   useEffect(() => {
@@ -46,6 +49,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   }, [sizeFlash]);
 
   function validateSize(): boolean {
+    if (oneSize) return true;
     if (!selectedSize) {
       setSizeFlash(true);
       return false;
@@ -54,14 +58,15 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   }
 
   function buildPayload() {
-    if (!selectedSize) throw new Error("Size required");
+    const size = oneSize ? ONE_SIZE : selectedSize;
+    if (!size) throw new Error("Size required");
     return {
       productId: product.id,
       slug: product.slug,
       name: product.name,
       colorId: color.id,
       colorName: color.name,
-      size: selectedSize,
+      size,
       price: product.price,
       image: color.image,
     };
@@ -82,9 +87,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   return (
     <>
       <ProductGallery
+        key={color.id}
         product={product}
         productImage={color.image}
-        alt={product.name}
+        secondaryImage={color.secondaryImage}
+        alt={`${product.name} — ${color.name}`}
       />
 
       <div className="mt-5 space-y-5">
@@ -107,34 +114,77 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             <p className="mt-1 text-sm text-neutral-600">{product.tagline}</p>
           )}
 
-          <div className="mt-4">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-medium uppercase">Size</span>
-              <button
-                type="button"
-                onClick={() => setChartOpen(true)}
-                className="text-xs text-neutral-600 underline underline-offset-2"
-              >
-                Size chart
-              </button>
+          {product.colors.length > 1 && (
+            <div className="mt-4">
+              <span className="text-xs font-medium uppercase">
+                Color — {color.name}
+              </span>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {product.colors.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => setColor(c)}
+                    className={`overflow-hidden border-2 transition ${
+                      oneSize ? "h-14 w-14" : "h-9 w-9"
+                    } ${
+                      color.id === c.id
+                        ? "border-neutral-900 ring-2 ring-neutral-900 ring-offset-2"
+                        : "border-neutral-200 hover:border-neutral-400"
+                    }`}
+                    style={
+                      oneSize ? undefined : { backgroundColor: c.hex }
+                    }
+                    aria-label={c.name}
+                    aria-pressed={color.id === c.id}
+                  >
+                    {oneSize ? (
+                      <img
+                        src={c.secondaryImage ?? c.image}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : null}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-5 gap-2">
-              {product.sizes.map((s) => (
+          )}
+
+          {!oneSize && (
+            <div className="mt-4">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-xs font-medium uppercase">Size</span>
                 <button
-                  key={s}
                   type="button"
-                  onClick={() => setSelectedSize(s)}
-                  className={`h-10 border text-sm font-medium transition ${
-                    selectedSize === s
-                      ? "border-brand bg-brand text-brand-foreground"
-                      : "border-neutral-200 hover:border-neutral-400"
-                  }`}
+                  onClick={() => setChartOpen(true)}
+                  className="text-xs text-neutral-600 underline underline-offset-2"
                 >
-                  {s}
+                  Size chart
                 </button>
-              ))}
+              </div>
+              <div className="grid grid-cols-5 gap-2">
+                {product.sizes.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setSelectedSize(s)}
+                    className={`h-10 border text-sm font-medium transition ${
+                      selectedSize === s
+                        ? "border-brand bg-brand text-brand-foreground"
+                        : "border-neutral-200 hover:border-neutral-400"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* {oneSize && (
+            <p className="mt-4 text-xs text-neutral-500">One size fits most</p>
+          )} */}
 
           <p className="mt-4 text-xs text-neutral-500">
             Free Shipping · Includes tracking
@@ -151,33 +201,6 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             Secure checkout · 14-day returns
           </p>
         </div>
-
-        {product.colors.length > 1 && (
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-medium uppercase">
-                Color — {color.name}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {product.colors.map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => setColor(c)}
-                  className={`h-9 w-9 border-2 transition ${
-                    color.id === c.id
-                      ? "border-neutral-900 ring-2 ring-neutral-900 ring-offset-2"
-                      : "border-neutral-200"
-                  }`}
-                  style={{ backgroundColor: c.hex }}
-                  aria-label={c.name}
-                  aria-pressed={color.id === c.id}
-                />
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* <TrustBadges compact /> */}
 
@@ -225,12 +248,14 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
         </div>
       )}
 
-      <SizeChartModal
-        open={chartOpen}
-        onClose={() => setChartOpen(false)}
-        rows={product.sizeChart}
-        productName={product.name}
-      />
+      {!oneSize && (
+        <SizeChartModal
+          open={chartOpen}
+          onClose={() => setChartOpen(false)}
+          rows={product.sizeChart ?? []}
+          productName={product.name}
+        />
+      )}
     </>
   );
 }

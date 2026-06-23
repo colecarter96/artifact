@@ -11,6 +11,7 @@ import {
   ensureFreeShippingPromo,
   FREE_SHIPPING_PROMO_CODE,
 } from "@/lib/shipping-promo";
+import { ONE_SIZE } from "@/lib/products";
 import { trackCheckoutStart } from "@/lib/tiktok-pixel";
 
 export function CartDrawer() {
@@ -158,12 +159,16 @@ export function CartDrawer() {
                     >
                       {line.name}
                     </Link>
-                    <p className="text-xs text-neutral-500">
-                      {line.colorName !== "Default"
-                        ? `${line.colorName} · `
-                        : ""}
-                      {line.size}
-                    </p>
+                    {(line.colorName !== "Default" || line.size !== ONE_SIZE) && (
+                      <p className="text-xs text-neutral-500">
+                        {[
+                          line.colorName !== "Default" ? line.colorName : null,
+                          line.size !== ONE_SIZE ? line.size : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </p>
+                    )}
                     <ProductPrice
                       cents={line.price}
                       className="mt-1 text-sm font-medium text-red-600"

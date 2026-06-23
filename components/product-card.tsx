@@ -5,7 +5,7 @@ import {
   getModelPhotoImageProps,
   getModelPhotoUrl,
 } from "@/lib/model-photos";
-import { getProductImageProps, type Product } from "@/lib/products";
+import { getProductImageProps, getProductCategory, type Product } from "@/lib/products";
 
 type ProductCardProps = {
   product: Product;
@@ -13,6 +13,7 @@ type ProductCardProps = {
 
 export function ProductCard({ product }: ProductCardProps) {
   const modelPhoto = getModelPhotoUrl(product.slug);
+  const category = getProductCategory(product);
 
   return (
     <article className="group relative flex flex-col">
@@ -27,6 +28,11 @@ export function ProductCard({ product }: ProductCardProps) {
               : getProductImageProps(product.slug))}
             sizes="(max-width: 512px) 50vw, 240px"
           />
+          {/* {category === "sunglasses" && (
+            <span className="absolute left-1.5 top-1.5 bg-white/90 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-neutral-700">
+              Shades
+            </span>
+          )} */}
         </div>
         <div className="mt-1.5 space-y-0">
           <h2 className="text-xs font-medium leading-snug">{product.name}</h2>
