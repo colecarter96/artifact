@@ -5,14 +5,24 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { OrderTimeline } from "@/components/order-timeline";
 import { useCart } from "@/context/cart-context";
-import { products, SALE_PRICE_CENTS } from "@/lib/products";
+import { products, ONE_SIZE, SALE_PRICE_CENTS } from "@/lib/products";
 import { trackOrderComplete } from "@/lib/tiktok-pixel";
 
 type OrderItem = {
   name: string;
+  color: string;
   size: string;
   quantity: number;
 };
+
+function formatOrderItemDetail(item: OrderItem): string {
+  return [
+    item.color !== "Default" ? item.color : null,
+    item.size !== ONE_SIZE ? `Size ${item.size}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
 
 type OrderDetails = {
   email: string | null;
@@ -146,18 +156,23 @@ function CheckoutSuccessContent() {
               Your items
             </p>
             <ul className="mt-3 space-y-2">
-              {order.items.map((item) => (
+              {order.items.map((item) => {
+                const detail = formatOrderItemDetail(item);
+                return (
                 <li
-                  key={`${item.name}-${item.size}`}
+                  key={`${item.name}-${item.color}-${item.size}`}
                   className="flex items-baseline justify-between gap-4 text-sm text-white"
                 >
                   <span className="font-bold">
                     {item.name}
                     {item.quantity > 1 ? ` ×${item.quantity}` : ""}
                   </span>
-                  <span className="shrink-0 text-white/70">Size {item.size}</span>
+                  {detail ? (
+                    <span className="shrink-0 text-white/70">{detail}</span>
+                  ) : null}
                 </li>
-              ))}
+              );
+              })}
             </ul>
           </div>
         )}

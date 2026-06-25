@@ -1,6 +1,6 @@
 import {
-  getAverageRating,
   getProductReviews,
+  getReviewSummary,
   type ProductReview,
 } from "@/lib/reviews";
 
@@ -29,23 +29,25 @@ function ReviewCard({ review }: { review: ProductReview }) {
         <Stars rating={review.rating} />
         <span className="sr-only">{review.rating} out of 5 stars</span>
       </div>
-      <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-        {review.body}
-      </p>
+      {review.body ? (
+        <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+          {review.body}
+        </p>
+      ) : null}
     </article>
   );
 }
 
 export function ProductReviews({ slug }: ProductReviewsProps) {
-  const reviews = getProductReviews(slug);
-  const average = getAverageRating(reviews);
+  const reviews = getProductReviews(slug).filter((review) => review.body.trim());
+  const { average, count } = getReviewSummary(slug);
 
   return (
     <section className="border-t border-neutral-200 pt-4">
       <div className="flex items-end justify-between gap-3">
         <h2 className="text-sm font-semibold uppercase">Reviews</h2>
         <p className="text-xs text-neutral-500">
-          {average} · {reviews.length} reviews
+          {average} · {count} reviews
         </p>
       </div>
       <div className="mt-2">

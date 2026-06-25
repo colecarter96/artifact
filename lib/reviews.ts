@@ -6,6 +6,11 @@ export type ProductReview = {
   body: string;
 };
 
+export type ReviewSummary = {
+  average: number;
+  count: number;
+};
+
 const sharedReviews: ProductReview[] = [
   {
     id: "r1",
@@ -91,10 +96,139 @@ const slugReviews: Record<string, ProductReview[]> = {
     },
     ...sharedReviews,
   ],
+  chimi: [
+    {
+      id: "chimi-1",
+      author: "marina c.",
+      rating: 5,
+      date: "Mar 10, 2026",
+      body: "The glasses fit well on the face. Strong and beautiful frame. I really liked the purchase. Well packaged. Fast delivery. Thank you, seller.",
+    },
+    {
+      id: "chimi-2",
+      author: "lucas f.",
+      rating: 5,
+      date: "Feb 27, 2026",
+      body: "Excellent quality",
+    },
+    {
+      id: "chimi-3",
+      author: "priya n.",
+      rating: 5,
+      date: "Feb 19, 2026",
+      body: "",
+    },
+    {
+      id: "chimi-4",
+      author: "owen b.",
+      rating: 4,
+      date: "Feb 8, 2026",
+      body: "",
+    },
+    {
+      id: "chimi-5",
+      author: "hana k.",
+      rating: 5,
+      date: "Jan 30, 2026",
+      body: "",
+    },
+  ],
+  cat: [
+    {
+      id: "cat-1",
+      author: "sofia r.",
+      rating: 5,
+      date: "Mar 6, 2026",
+      body: "Sun protection of good quality and very good material",
+    },
+    {
+      id: "cat-2",
+      author: "diego m.",
+      rating: 5,
+      date: "Feb 24, 2026",
+      body: "Great for the price",
+    },
+    {
+      id: "cat-3",
+      author: "emily t.",
+      rating: 5,
+      date: "Feb 11, 2026",
+      body: "I loved these sunglasses. very good quality and similar to original one. there's no case but for the price it's not an issue",
+    },
+    {
+      id: "cat-4",
+      author: "nina w.",
+      rating: 5,
+      date: "Jan 29, 2026",
+      body: "Great quality, perfect fit. definitely worth purchasing",
+    },
+    {
+      id: "cat-5",
+      author: "carlos v.",
+      rating: 5,
+      date: "Jan 18, 2026",
+      body: "",
+    },
+  ],
+  jmm: [
+    {
+      id: "jmm-1",
+      author: "alex h.",
+      rating: 5,
+      date: "Mar 9, 2026",
+      body: "Great quality",
+    },
+    {
+      id: "jmm-2",
+      author: "rachel d.",
+      rating: 5,
+      date: "Feb 26, 2026",
+      body: "Seriously good quality, which is surprising at this price point. will have to see how they hold up, but out the box they seems great. sturdy hinges, glasses don't feel flimsy at all.",
+    },
+    {
+      id: "jmm-3",
+      author: "megan s.",
+      rating: 5,
+      date: "Feb 14, 2026",
+      body: "It's just like in the photo, it comes without a case but with a cloth to clean the lenses, it looks good with them, very pretty color.",
+    },
+    {
+      id: "jmm-4",
+      author: "tyler j.",
+      rating: 5,
+      date: "Feb 2, 2026",
+      body: "Great glasses, high quality, sturdy, look exactly like picture",
+    },
+    {
+      id: "jmm-5",
+      author: "jess l.",
+      rating: 4,
+      date: "Jan 22, 2026",
+      body: "",
+    },
+  ],
+};
+
+/** Store-wide average + total count when it differs from displayed reviews */
+const reviewSummaries: Record<string, ReviewSummary> = {
+  chimi: { average: 4.6, count: 14 },
+  cat: { average: 4.8, count: 22 },
+  jmm: { average: 4.7, count: 87 },
 };
 
 export function getProductReviews(slug: string): ProductReview[] {
   return slugReviews[slug] ?? sharedReviews;
+}
+
+export function getReviewSummary(slug: string): ReviewSummary {
+  const summary = reviewSummaries[slug];
+  if (summary) return summary;
+
+  const reviews = getProductReviews(slug);
+  return {
+    average: getAverageRating(reviews),
+    count: reviews.length,
+  };
 }
 
 export function getAverageRating(reviews: ProductReview[]): number {

@@ -56,9 +56,9 @@ export default function HomePage() {
         <ScrollReveal>
           <OrderTimeline />
         </ScrollReveal>
-        <ScrollReveal delay={120}>
+        {/* <ScrollReveal delay={120}>
           <TrustReassurance />
-        </ScrollReveal>
+        </ScrollReveal> */}
       </section>
 
       <section className="-mx-3 mt-10 bg-neutral-900 px-3 py-6 text-center text-white">

@@ -75,13 +75,12 @@ export const LIST_PRICE_CENTS = 4250;
 export const SALE_PRICE_CENTS = 2125;
 /** World Cup + It's Called Soccer shirts */
 export const SOCCER_SHIRT_PRICE_CENTS = 1950;
-export const SUNGLASSES_PRICE_CENTS = 3500;
 
 export const PRODUCT_DESCRIPTION =
   "100% cotton shirts for people with something wrong with them. In a good way.";
 
 export const SUNGLASSES_DESCRIPTION =
-  "UV400 polarized lenses. Hard case included. One size fits most.";
+  "UV400 acetate sunglasses for the summer";
 
 function image(path: string): string {
   return `/shirtImages/${path}`;
@@ -285,17 +284,18 @@ export const products: Product[] = [
   {
     id: "cat",
     slug: "cat",
-    name: "Cat Eye",
+    name: "Lynx",
     category: "sunglasses",
     tagline: "UV400",
     description: SUNGLASSES_DESCRIPTION,
     compareAtPrice: 4500,
-    price: SUNGLASSES_PRICE_CENTS,
+    price: 1850,
+    stripePriceId: "price_1Tm3LZAKB242hqM6TWQ6PNF8",
     colors: [
+      sunglassesColor("cat", "black-brown", "Black / Brown", "#3d2914", "catBlackBrownModel.png", "catBlackBrown.avif"),
       sunglassesColor("cat", "brown", "Brown", "#6b4423", "catBrownModel.png", "catBrown.avif"),
       sunglassesColor("cat", "black", "Black", "#1a1a1a", "catBlackModel.png", "catBlack.avif"),
       
-      sunglassesColor("cat", "black-brown", "Black / Brown", "#3d2914", "catBrownModel.png", "catBlackBrown.avif"),
     ],
     sizes: [],
     featured: true,
@@ -304,12 +304,13 @@ export const products: Product[] = [
   {
     id: "chimi",
     slug: "chimi",
-    name: "Chimi",
+    name: "Seafarer",
     category: "sunglasses",
     tagline: "UV400",
     description: SUNGLASSES_DESCRIPTION,
     compareAtPrice: 4500,
-    price: SUNGLASSES_PRICE_CENTS,
+    price: 1350,
+    stripePriceId: "price_1Tm3LzAKB242hqM6uyiw8ME4",
     colors: [
       sunglassesColor("Chimi", "yellow", "Yellow", "#d4a017", "ChimiYellowModel.png", "ChimiYellow.png"),
       sunglassesColor("Chimi", "black", "Black", "#1a1a1a", "ChimiBlackModel.png", "ChimiBlack.avif"),
@@ -323,12 +324,13 @@ export const products: Product[] = [
   {
     id: "jmm",
     slug: "jmm",
-    name: "JMM",
+    name: "Oliver",
     category: "sunglasses",
     tagline: "UV400",
     description: SUNGLASSES_DESCRIPTION,
     compareAtPrice: 4500,
-    price: SUNGLASSES_PRICE_CENTS,
+    price: 1450,
+    stripePriceId: "price_1Tm3KwAKB242hqM6PFiwYKu6",
     colors: [
       sunglassesColor("JMM", "beige", "Beige", "#d4c4a8", "JMMBeigeModel.png", "JMMBeige.avif"),
       sunglassesColor("JMM", "black", "Black", "#1a1a1a", "JMMBlackModel.png", "JMMBlack.avif"),
