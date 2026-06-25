@@ -1,5 +1,8 @@
 export const SIZES = ["S", "M", "L", "XL", "2XL"] as const;
-export type Size = (typeof SIZES)[number];
+export const ONE_SIZE = "OS" as const;
+export type Size = (typeof SIZES)[number] | typeof ONE_SIZE;
+
+export type ProductCategory = "shirt" | "sunglasses";
 
 export type SizeChartRow = {
   size: Size;
@@ -13,10 +16,12 @@ export type ColorVariant = {
   id: string;
   name: string;
   hex: string;
-  /** Full image for product page & cart */
+  /** Primary image — model/lifestyle shot for sunglasses */
   image: string;
   /** Cropped/zoomed image for home grid */
   gridImage: string;
+  /** Second carousel slide (e.g. flat product shot) */
+  secondaryImage?: string;
 };
 
 export type DualViews = {
@@ -28,6 +33,7 @@ export type Product = {
   id: string;
   slug: string;
   name: string;
+  category?: ProductCategory;
   tagline: string;
   description: string;
   /** Price in USD cents */
@@ -39,11 +45,13 @@ export type Product = {
   views?: DualViews;
   /** Second product photo in the swipe gallery (e.g. flat lay after lifestyle shot) */
   secondaryImage?: string;
+  /** Extra gallery slides after the primary product image */
+  galleryImages?: string[];
   colors: ColorVariant[];
   sizes: Size[];
   featured?: boolean;
   tags: string[];
-  sizeChart: SizeChartRow[];
+  sizeChart?: SizeChartRow[];
 };
 
 export function hasDualViews(
@@ -71,8 +79,30 @@ export const SOCCER_SHIRT_PRICE_CENTS = 1950;
 export const PRODUCT_DESCRIPTION =
   "100% cotton shirts for people with something wrong with them. In a good way.";
 
+export const SUNGLASSES_DESCRIPTION =
+  "UV400 acetate sunglasses for the summer";
+
 function image(path: string): string {
   return `/shirtImages/${path}`;
+}
+
+function sunglassesColor(
+  folder: string,
+  id: string,
+  name: string,
+  hex: string,
+  modelFile: string,
+  productFile: string,
+): ColorVariant {
+  const base = `/sunglasses/${folder}`;
+  return {
+    id,
+    name,
+    hex,
+    image: `${base}/${modelFile}`,
+    gridImage: `${base}/${modelFile}`,
+    secondaryImage: `${base}/${productFile}`,
+  };
 }
 
 function singleColor(
@@ -251,10 +281,81 @@ export const products: Product[] = [
   //   tags: [],
   //   sizeChart: defaultSizeChart,
   // },
+  {
+    id: "cat",
+    slug: "cat",
+    name: "Lynx",
+    category: "sunglasses",
+    tagline: "UV400",
+    description: SUNGLASSES_DESCRIPTION,
+    compareAtPrice: 4500,
+    price: 1850,
+    stripePriceId: "price_1Tm3LZAKB242hqM6TWQ6PNF8",
+    colors: [
+      sunglassesColor("cat", "black-brown", "Black / Brown", "#3d2914", "catBlackBrownModel.png", "catBlackBrown.avif"),
+      sunglassesColor("cat", "brown", "Brown", "#6b4423", "catBrownModel.png", "catBrown.avif"),
+      sunglassesColor("cat", "black", "Black", "#1a1a1a", "catBlackModel.png", "catBlack.avif"),
+      
+    ],
+    sizes: [],
+    featured: true,
+    tags: ["new"],
+  },
+  {
+    id: "chimi",
+    slug: "chimi",
+    name: "Seafarer",
+    category: "sunglasses",
+    tagline: "UV400",
+    description: SUNGLASSES_DESCRIPTION,
+    compareAtPrice: 4500,
+    price: 1350,
+    stripePriceId: "price_1Tm3LzAKB242hqM6uyiw8ME4",
+    colors: [
+      sunglassesColor("Chimi", "yellow", "Yellow", "#d4a017", "ChimiYellowModel.png", "ChimiYellow.png"),
+      sunglassesColor("Chimi", "black", "Black", "#1a1a1a", "ChimiBlackModel.png", "ChimiBlack.avif"),
+      sunglassesColor("Chimi", "tort", "Tortoise", "#8b5a2b", "ChimiTortModel.png", "ChimiTort.avif"),
+      
+    ],
+    sizes: [],
+    featured: true,
+    tags: ["new"],
+  },
+  {
+    id: "jmm",
+    slug: "jmm",
+    name: "Oliver",
+    category: "sunglasses",
+    tagline: "UV400",
+    description: SUNGLASSES_DESCRIPTION,
+    compareAtPrice: 4500,
+    price: 1450,
+    stripePriceId: "price_1Tm3KwAKB242hqM6PFiwYKu6",
+    colors: [
+      sunglassesColor("JMM", "beige", "Beige", "#d4c4a8", "JMMBeigeModel.png", "JMMBeige.avif"),
+      sunglassesColor("JMM", "black", "Black", "#1a1a1a", "JMMBlackModel.png", "JMMBlack.avif"),
+      sunglassesColor("JMM", "tort", "Tortoise", "#8b5a2b", "JMMTortModel.png", "JMMTort.avif"),
+    ],
+    sizes: [],
+    featured: true,
+    tags: ["new"],
+  },
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
+}
+
+export function getProductCategory(product: Product): ProductCategory {
+  return product.category ?? "shirt";
+}
+
+export function isOneSizeProduct(product: Product): boolean {
+  return getProductCategory(product) === "sunglasses";
+}
+
+export function getProductsByCategory(category: ProductCategory): Product[] {
+  return products.filter((p) => getProductCategory(p) === category);
 }
 
 export function getAllProductSlugs(): string[] {

@@ -18,6 +18,7 @@ type GallerySlide = {
 type ProductGalleryProps = {
   product: Product;
   productImage: string;
+  secondaryImage?: string;
   alt: string;
 };
 
@@ -31,6 +32,7 @@ function buildSlides(
   product: Product,
   productImage: string,
   alt: string,
+  colorSecondaryImage?: string,
 ): GallerySlide[] {
   const slides: GallerySlide[] = [];
 
@@ -66,14 +68,23 @@ function buildSlides(
       src: productImage,
       alt,
     });
-    if (product.secondaryImage) {
+    const detailImage = colorSecondaryImage ?? product.secondaryImage;
+    if (detailImage) {
       slides.push({
         key: "product-alt",
         label: "Product detail",
-        src: product.secondaryImage,
+        src: detailImage,
         alt: `${alt} — detail`,
       });
     }
+    product.galleryImages?.forEach((src, index) => {
+      slides.push({
+        key: `gallery-${index}`,
+        label: `Photo ${index + 2}`,
+        src,
+        alt: `${alt} — photo ${index + 2}`,
+      });
+    });
   }
 
   return slides;
@@ -82,11 +93,12 @@ function buildSlides(
 export function ProductGallery({
   product,
   productImage,
+  secondaryImage,
   alt,
 }: ProductGalleryProps) {
   const slides = useMemo(
-    () => buildSlides(product, productImage, alt),
-    [product, productImage, alt],
+    () => buildSlides(product, productImage, alt, secondaryImage),
+    [product, productImage, alt, secondaryImage],
   );
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);

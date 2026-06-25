@@ -35,6 +35,7 @@ export async function POST(request: Request) {
     const lineItems: { price: string; quantity: number }[] = [];
     const metadataItems: {
       name: string;
+      color: string;
       size: string;
       quantity: number;
     }[] = [];
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
         !item.productId ||
         !item.slug ||
         !item.name ||
+        !item.colorName ||
         !item.size ||
         typeof item.quantity !== "number" ||
         item.quantity < 1 ||
@@ -80,6 +82,7 @@ export async function POST(request: Request) {
 
       metadataItems.push({
         name: item.name,
+        color: item.colorName,
         size: item.size,
         quantity: item.quantity,
       });
