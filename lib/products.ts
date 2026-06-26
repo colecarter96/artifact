@@ -289,8 +289,8 @@ export const products: Product[] = [
     tagline: "UV400",
     description: SUNGLASSES_DESCRIPTION,
     compareAtPrice: 4500,
-    price: 1850,
-    stripePriceId: "price_1Tm3LZAKB242hqM6TWQ6PNF8",
+    price: 1200,
+    stripePriceId: "price_1Tmd53AKB242hqM66aeImAY6",
     colors: [
       sunglassesColor("cat", "black-brown", "Black / Brown", "#3d2914", "catBlackBrownModel.png", "catBlackBrown.avif"),
       sunglassesColor("cat", "brown", "Brown", "#6b4423", "catBrownModel.png", "catBrown.avif"),
@@ -309,8 +309,8 @@ export const products: Product[] = [
     tagline: "UV400",
     description: SUNGLASSES_DESCRIPTION,
     compareAtPrice: 4500,
-    price: 1350,
-    stripePriceId: "price_1Tm3LzAKB242hqM6uyiw8ME4",
+    price: 900,
+    stripePriceId: "price_1Tmd23AKB242hqM6LAm8OBkR",
     colors: [
       sunglassesColor("Chimi", "yellow", "Yellow", "#d4a017", "ChimiYellowModel.png", "ChimiYellow.png"),
       sunglassesColor("Chimi", "black", "Black", "#1a1a1a", "ChimiBlackModel.png", "ChimiBlack.avif"),
@@ -329,8 +329,8 @@ export const products: Product[] = [
     tagline: "UV400",
     description: SUNGLASSES_DESCRIPTION,
     compareAtPrice: 4500,
-    price: 1450,
-    stripePriceId: "price_1Tm3KwAKB242hqM6PFiwYKu6",
+    price: 950,
+    stripePriceId: "price_1Tmd4NAKB242hqM6s0vosdhM",
     colors: [
       sunglassesColor("JMM", "beige", "Beige", "#d4c4a8", "JMMBeigeModel.png", "JMMBeige.avif"),
       sunglassesColor("JMM", "black", "Black", "#1a1a1a", "JMMBlackModel.png", "JMMBlack.avif"),
