@@ -3,6 +3,7 @@ import {
   getReviewSummary,
   type ProductReview,
 } from "@/lib/reviews";
+import { OliverDetailImages } from "./oliver-detail-images";
 
 type ProductReviewsProps = {
   slug: string;
@@ -52,7 +53,12 @@ export function ProductReviews({ slug }: ProductReviewsProps) {
           {average} · {count} reviews
         </p>
       </div>
-      <div className="mt-2">
+      {slug === "jmm" && (
+        <div className="mt-3">
+          <OliverDetailImages />
+        </div>
+      )}
+      <div className="mt-4">
         {reviews.map((review) => (
           <ReviewCard key={review.id} review={review} />
         ))}

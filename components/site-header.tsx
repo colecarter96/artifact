@@ -17,11 +17,11 @@ export function SiteHeader() {
           aria-label="Appropriate home"
         >
           <Image
-            src="/logos/logo.jpg"
+            src="/logos/appropriate.png"
             alt="Appropriate"
-            width={360}
-            height={100}
-            className="h-7 w-auto max-w-[50vw] object-contain"
+            width={210}
+            height={60}
+            className="h-7 w-auto max-w-[40vw] object-contain"
             style={{ width: "auto", height: "1.75rem" }}
             priority
             unoptimized

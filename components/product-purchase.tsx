@@ -11,9 +11,10 @@ import {
   type Size,
 } from "@/lib/products";
 import { ProductGallery } from "./product-gallery";
+import { Disclosure } from "./disclosure";
 import { ProductPrice } from "./product-price";
 import { ProductReviews } from "./product-reviews";
-import { OrderTimeline } from "./order-timeline";
+// import { OrderTimeline } from "./order-timeline";
 import { SizeChartModal } from "./size-chart-modal";
 import { trackViewContent } from "@/lib/tiktok-pixel";
 import { startCheckout } from "@/lib/start-checkout";
@@ -128,6 +129,8 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
         secondaryImage={color.secondaryImage}
         alt={`${product.name} — ${color.name}`}
       />
+
+      
 
       <div className="mt-6 space-y-6">
         <div>
@@ -249,12 +252,16 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
           </div>
         )}
 
+        <Disclosure label="Disclosure">
+          Model images are made with AI for illustration.
+        </Disclosure>
+
         <div id="details" className="space-y-6 border-t border-neutral-300/80 pt-6">
           <p className="text-sm leading-relaxed text-neutral-600">
             {product.description}
           </p>
           <ProductReviews slug={product.slug} />
-          <OrderTimeline compact />
+          {/* <OrderTimeline compact /> */}
         </div>
       </div>
 
