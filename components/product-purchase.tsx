@@ -16,19 +16,21 @@ import { ProductReviews } from "./product-reviews";
 import { OrderTimeline } from "./order-timeline";
 import { SizeChartModal } from "./size-chart-modal";
 import { trackViewContent } from "@/lib/tiktok-pixel";
-import { TrustBadges } from "./trust-badges";
+import { startCheckout } from "@/lib/start-checkout";
 
 type ProductPurchaseProps = {
   product: Product;
 };
 
 export function ProductPurchase({ product }: ProductPurchaseProps) {
-  const { addItem, buyNow } = useCart();
+  const { addItem } = useCart();
   const [color, setColor] = useState<ColorVariant>(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
   const [sizeFlash, setSizeFlash] = useState(false);
   const [chartOpen, setChartOpen] = useState(false);
   const [addedFeedback, setAddedFeedback] = useState(false);
+  const [buyNowLoading, setBuyNowLoading] = useState(false);
+  const [buyNowError, setBuyNowError] = useState<string | null>(null);
 
   const oneSize = isOneSizeProduct(product);
   const checkoutReady = isProductCheckoutReady(product);
@@ -79,9 +81,42 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
     window.setTimeout(() => setAddedFeedback(false), 2000);
   }
 
-  function handleBuyNow() {
+  async function handleBuyNow() {
     if (!validateSize()) return;
-    buyNow(buildPayload());
+
+    setBuyNowLoading(true);
+    setBuyNowError(null);
+
+    try {
+      const payload = buildPayload();
+      await startCheckout(
+        [
+          {
+            productId: payload.productId,
+            slug: payload.slug,
+            name: payload.name,
+            colorName: payload.colorName,
+            size: payload.size,
+            quantity: 1,
+          },
+        ],
+        [
+          {
+            productId: payload.productId,
+            name: payload.name,
+            price: payload.price,
+            quantity: 1,
+          },
+        ],
+      );
+    } catch (error) {
+      setBuyNowError(
+        error instanceof Error
+          ? error.message
+          : "Checkout failed. Please try again.",
+      );
+      setBuyNowLoading(false);
+    }
   }
 
   return (
@@ -94,155 +129,144 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
         alt={`${product.name} — ${color.name}`}
       />
 
-      <div className="mt-5 space-y-5">
+      <div className="mt-6 space-y-6">
         <div>
-          {product.tags[0] && (
-            <p className="mb-1 text-[10px] font-semibold uppercase text-neutral-500">
-              {product.tags[0]}
-            </p>
-          )}
-          <div className="flex items-baseline justify-between gap-3">
-            <h1 className="min-w-0 flex-1 text-lg font-semibold leading-snug sm:text-2xl">
+          <div className="flex items-baseline justify-between gap-4">
+            <h1 className="text-base font-bold uppercase tracking-wide">
               {product.name}
             </h1>
             <ProductPrice
               cents={product.price}
-              className="shrink-0 text-lg font-light text-gray-700 sm:text-xl"
+              className="shrink-0 text-base font-normal text-neutral-900"
             />
           </div>
-          {product.tagline && (
-            <p className="mt-1 text-sm text-neutral-600">{product.tagline}</p>
+
+          <a
+            href="#details"
+            className="mt-2 inline-flex items-center gap-1 text-xs text-neutral-600 underline-offset-2 hover:underline"
+          >
+            View details →
+          </a>
+
+          <div className="mt-5 space-y-3">
+            <button
+              type="button"
+              onClick={handleAddToBag}
+              disabled={!checkoutReady}
+              className="flex h-12 w-full items-center justify-center bg-neutral-900 text-xs font-medium uppercase tracking-widest text-white transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {addedFeedback ? "Added ✓" : "Add to cart"}
+            </button>
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              disabled={!checkoutReady || buyNowLoading}
+              className="flex h-12 w-full items-center justify-center border border-neutral-900 bg-surface text-xs font-medium uppercase tracking-widest text-neutral-900 transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {buyNowLoading ? "Opening checkout…" : "Buy now"}
+            </button>
+          </div>
+
+          {buyNowError && (
+            <p className="mt-3 text-xs text-red-600">{buyNowError}</p>
           )}
 
-          {product.colors.length > 1 && (
-            <div className="mt-4">
-              <span className="text-xs font-medium uppercase">
-                Color — {color.name}
-              </span>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {product.colors.map((c) => (
+          {!checkoutReady && (
+            <p className="mt-3 text-xs text-neutral-600">
+              Coming soon — checkout not live for this style yet.
+            </p>
+          )}
+
+          <p className="mt-4 text-xs text-neutral-500">
+            Free shipping · Includes tracking · Secure checkout
+          </p>
+        </div>
+
+        {product.colors.length > 1 && (
+          <section className="border-t border-neutral-300/80 pt-5">
+            <div className="flex items-center justify-between text-xs uppercase tracking-wide">
+              <span className="text-neutral-500">More colors</span>
+              <span className="font-medium text-neutral-900">{color.name}</span>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              {product.colors.map((c) => {
+                const selected = color.id === c.id;
+                return (
                   <button
                     key={c.id}
                     type="button"
                     onClick={() => setColor(c)}
-                    className={`overflow-hidden border-2 transition ${
-                      oneSize ? "h-14 w-14" : "h-9 w-9"
-                    } ${
-                      color.id === c.id
-                        ? "border-neutral-900 ring-2 ring-neutral-900 ring-offset-2"
-                        : "border-neutral-200 hover:border-neutral-400"
+                    className={`relative aspect-[4/3] w-full overflow-hidden bg-surface transition ${
+                      selected
+                        ? "border-2 border-neutral-900"
+                        : "border-2 border-transparent opacity-75 hover:opacity-100"
                     }`}
-                    style={
-                      oneSize ? undefined : { backgroundColor: c.hex }
-                    }
                     aria-label={c.name}
-                    aria-pressed={color.id === c.id}
+                    aria-pressed={selected}
                   >
-                    {oneSize ? (
-                      <img
-                        src={c.secondaryImage ?? c.image}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    ) : null}
+                    <img
+                      src={c.secondaryImage ?? c.image}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-contain p-3"
+                    />
                   </button>
-                ))}
-              </div>
+                );
+              })}
             </div>
-          )}
+          </section>
+        )}
 
-          {!oneSize && (
-            <div className="mt-4">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-xs font-medium uppercase">Size</span>
+        {!oneSize && (
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-xs font-medium uppercase tracking-wide">
+                Size
+              </span>
+              <button
+                type="button"
+                onClick={() => setChartOpen(true)}
+                className="text-xs text-neutral-600 underline underline-offset-2"
+              >
+                Size chart
+              </button>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+              {product.sizes.map((s) => (
                 <button
+                  key={s}
                   type="button"
-                  onClick={() => setChartOpen(true)}
-                  className="text-xs text-neutral-600 underline underline-offset-2"
+                  onClick={() => setSelectedSize(s)}
+                  className={`h-10 border text-sm font-medium transition ${
+                    selectedSize === s
+                      ? "border-neutral-900 bg-neutral-900 text-white"
+                      : "border-neutral-300 bg-white hover:border-neutral-900"
+                  }`}
                 >
-                  Size chart
+                  {s}
                 </button>
-              </div>
-              <div className="grid grid-cols-5 gap-2">
-                {product.sizes.map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => setSelectedSize(s)}
-                    className={`h-10 border text-sm font-medium transition ${
-                      selectedSize === s
-                        ? "border-brand bg-brand text-brand-foreground"
-                        : "border-neutral-200 hover:border-neutral-400"
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* {oneSize && (
-            <p className="mt-4 text-xs text-neutral-500">One size fits most</p>
-          )} */}
-
-          <p className="mt-4 text-xs text-neutral-500">
-            Free Shipping · Includes tracking
+        <div id="details" className="space-y-6 border-t border-neutral-300/80 pt-6">
+          <p className="text-sm leading-relaxed text-neutral-600">
+            {product.description}
           </p>
-          {!checkoutReady && (
-            <p className="mt-2 text-xs text-neutral-600">
-              Coming soon — checkout not live for this design yet.
-            </p>
-          )}
-          <p className="mt-2 flex items-center gap-2 text-[11px] text-neutral-500">
-            <span className="border border-neutral-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-neutral-600">
-              Secure
-            </span>
-            Secure checkout · 14-day returns
-          </p>
-        </div>
-
-        {/* <TrustBadges compact /> */}
-
-        <p className="text-sm leading-relaxed text-neutral-600">
-          {product.description}
-        </p>
-
-        <div className="space-y-4">
           <ProductReviews slug={product.slug} />
           <OrderTimeline compact />
         </div>
       </div>
 
-      {/* Spacer for sticky bar */}
-      <div className="h-24" aria-hidden />
-
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-neutral-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90">
-        <div className="mx-auto flex max-w-lg gap-2 p-3">
-          <button
-            type="button"
-            onClick={handleAddToBag}
-            className="flex h-12 flex-1 items-center justify-center border-2 border-neutral-900 text-sm font-semibold transition active:scale-[0.98]"
-          >
-            {addedFeedback ? "Added ✓" : "Add to bag"}
-          </button>
-          <button
-            type="button"
-            onClick={handleBuyNow}
-            className="flex h-12 flex-[1.15] items-center justify-center bg-brand text-sm font-semibold text-brand-foreground transition active:scale-[0.98]"
-          >
-            Buy now
-          </button>
-        </div>
-      </div>
+      <div className="h-6" aria-hidden />
 
       {sizeFlash && (
         <div
-          className="pointer-events-none fixed inset-0 z-[70] flex items-center justify-center px-6"
+          className="pointer-events-none fixed inset-0 z-70 flex items-center justify-center px-6"
           role="status"
           aria-live="polite"
         >
-          <p className="rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold tracking-wide text-white shadow-lg">
+          <p className="bg-neutral-900 px-5 py-3 text-center text-sm font-medium tracking-wide text-white">
             Please select a size
           </p>
         </div>

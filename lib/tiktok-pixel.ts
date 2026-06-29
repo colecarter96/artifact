@@ -1,5 +1,3 @@
-import { EMAIL_PROMO_CLAIMED_KEY } from "@/lib/shipping-promo";
-
 export const TIKTOK_PIXEL_ID =
   process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID ?? "D8H6U7BC77UDLID684IG";
 
@@ -81,12 +79,7 @@ function getTtclid(): string | undefined {
   return new URLSearchParams(window.location.search).get("ttclid") ?? undefined;
 }
 
-export function getClaimedPromoEmail(): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(EMAIL_PROMO_CLAIMED_KEY);
-}
-
-export async function identifyTikTokUser(params: IdentifyParams) {
+async function identifyTikTokUser(params: IdentifyParams) {
   if (typeof window === "undefined" || !window.ttq) return;
 
   const payload: Record<string, string> = {};
@@ -145,7 +138,7 @@ async function sendServerEvent(
   items: TikTokItem[],
   options?: TrackOptions,
 ) {
-  const email = options?.identify?.email ?? getClaimedPromoEmail() ?? undefined;
+  const email = options?.identify?.email;
 
   try {
     await fetch("/api/tiktok/event", {
@@ -171,13 +164,12 @@ async function sendServerEvent(
 }
 
 async function identifyIfAvailable(identify?: IdentifyParams) {
-  const email = identify?.email ?? getClaimedPromoEmail();
-  if (!email && !identify?.phone && !identify?.externalId) return;
+  if (!identify?.email && !identify?.phone && !identify?.externalId) return;
 
   await identifyTikTokUser({
-    email: email ?? undefined,
-    phone: identify?.phone,
-    externalId: identify?.externalId ?? email ?? undefined,
+    email: identify.email,
+    phone: identify.phone,
+    externalId: identify.externalId ?? identify.email,
   });
 }
 

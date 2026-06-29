@@ -21,7 +21,7 @@ export async function generateMetadata({
   const product = getProductBySlug(slug);
   if (!product) return { title: "Product not found" };
   return {
-    title: `${product.name} | Artifact`,
+    title: `${product.name} | Appropriate`,
     description: product.description,
   };
 }
@@ -35,7 +35,7 @@ export default async function ProductPage({ params }: PageProps) {
   }
 
   return (
-    <div className="pt-2">
+    <div>
       <ProductPurchase product={product} />
     </div>
   );

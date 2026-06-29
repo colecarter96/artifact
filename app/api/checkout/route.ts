@@ -97,32 +97,33 @@ export async function POST(request: Request) {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      ui_mode: "embedded_page",
       line_items: lineItems,
       shipping_address_collection: {
         allowed_countries: SHIPPING_COUNTRIES,
-      },
-      phone_number_collection: {
-        enabled: true,
       },
       ...(shippingRateId
         ? {
             shipping_options: [{ shipping_rate: shippingRateId }],
           }
         : {}),
-      allow_promotion_codes: true,
+      wallet_options: {
+        link: {
+          display: "never",
+        },
+      },
       metadata: buildCheckoutMetadata(metadataItems),
-      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/?checkout=cancelled`,
+      return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     });
 
-    if (!session.url) {
+    if (!session.client_secret) {
       return NextResponse.json(
         { error: "Could not start checkout." },
         { status: 500 },
       );
     }
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ clientSecret: session.client_secret });
   } catch (error) {
     console.error("Stripe checkout error:", error);
     return NextResponse.json(

@@ -6,11 +6,13 @@
 }
 
 @theme {
-  --color-background: #ffffff;
+  --color-background: #f3f3f3;
   --color-foreground: #171717;
+  --color-surface: #f3f3f3;
   --color-brand: #171717;
   --color-brand-foreground: #ffffff;
-  --font-sans: var(--font-comic-helvetic), system-ui, sans-serif;
+  --font-sans:
+    "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
 }
 
 @keyframes bag-pulse {

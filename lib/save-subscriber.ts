@@ -1,5 +1,10 @@
 import { getRedis } from "@/lib/redis";
-import { isValidEmail } from "@/lib/shipping-promo";
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValidEmail(email: string): boolean {
+  return EMAIL_PATTERN.test(email.trim());
+}
 
 const SUBSCRIBER_SET_KEY = "artifact:subscriber-emails";
 const SUBSCRIBER_LOG_KEY = "artifact:subscriber-log";
