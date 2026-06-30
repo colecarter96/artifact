@@ -3,6 +3,12 @@ import {
   getReviewSummary,
   type ProductReview,
 } from "@/lib/reviews";
+import { ReviewDetailImages } from "./review-detail-images";
+
+const REVIEW_IMAGES: Record<string, string[]> = {
+  jmm: ["/sunglasses/JMM/jmmImg.avif", "/sunglasses/JMM/jmmImg2.avif"],
+  oval: ["/sunglasses/oval/ovalImg.avif", "/sunglasses/oval/ovalImg1.avif"],
+};
 
 type ProductReviewsProps = {
   slug: string;
@@ -20,7 +26,7 @@ function Stars({ rating }: { rating: number }) {
 
 function ReviewCard({ review }: { review: ProductReview }) {
   return (
-    <article className="border-t border-neutral-100 py-4 first:border-t-0 first:pt-0">
+    <article className="border-t border-neutral-300/80 py-4 first:border-t-0 first:pt-0">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-medium">{review.author}</p>
         <p className="text-xs text-neutral-400">{review.date}</p>
@@ -43,14 +49,21 @@ export function ProductReviews({ slug }: ProductReviewsProps) {
   const { average, count } = getReviewSummary(slug);
 
   return (
-    <section className="border-t border-neutral-200 pt-4">
+    <section>
       <div className="flex items-end justify-between gap-3">
-        <h2 className="text-sm font-semibold uppercase">Reviews</h2>
+        <h2 className="text-xs font-medium uppercase tracking-wide">
+          Reviews
+        </h2>
         <p className="text-xs text-neutral-500">
           {average} · {count} reviews
         </p>
       </div>
-      <div className="mt-2">
+      {REVIEW_IMAGES[slug] && (
+        <div className="mt-3">
+          <ReviewDetailImages images={REVIEW_IMAGES[slug]} />
+        </div>
+      )}
+      <div className="mt-4">
         {reviews.map((review) => (
           <ReviewCard key={review.id} review={review} />
         ))}

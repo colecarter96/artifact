@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   getModelPhotoImageProps,
   getModelPhotoUrl,
@@ -13,6 +13,7 @@ type GallerySlide = {
   label: string;
   src: string;
   alt: string;
+  contain?: boolean;
 };
 
 type ProductGalleryProps = {
@@ -25,7 +26,7 @@ type ProductGalleryProps = {
 function getSlideImageProps(product: Product, slideKey: string) {
   if (slideKey === "model") return getModelPhotoImageProps(product.slug);
   if (slideKey === "product") return getProductImageProps(product.slug);
-  return { className: "object-cover object-center" };
+  return { className: "object-contain object-center p-8" };
 }
 
 function buildSlides(
@@ -67,6 +68,7 @@ function buildSlides(
       label: "Product",
       src: productImage,
       alt,
+      contain: true,
     });
     const detailImage = colorSecondaryImage ?? product.secondaryImage;
     if (detailImage) {
@@ -75,6 +77,7 @@ function buildSlides(
         label: "Product detail",
         src: detailImage,
         alt: `${alt} — detail`,
+        contain: true,
       });
     }
     product.galleryImages?.forEach((src, index) => {
@@ -83,6 +86,7 @@ function buildSlides(
         label: `Photo ${index + 2}`,
         src,
         alt: `${alt} — photo ${index + 2}`,
+        contain: true,
       });
     });
   }
@@ -103,6 +107,11 @@ export function ProductGallery({
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    setActiveIndex(0);
+    scrollRef.current?.scrollTo({ left: 0 });
+  }, [productImage, secondaryImage]);
+
   const scrollToIndex = useCallback((index: number) => {
     const container = scrollRef.current;
     if (!container) return;
@@ -122,9 +131,11 @@ export function ProductGallery({
 
   if (slides.length === 1) {
     const slide = slides[0];
-    const imageProps = getSlideImageProps(product, slide.key);
+    const imageProps = slide.contain
+      ? { className: "object-contain p-8" }
+      : getSlideImageProps(product, slide.key);
     return (
-      <div className="relative aspect-square overflow-hidden bg-neutral-100">
+      <div className="relative aspect-square overflow-hidden bg-surface">
         <Image
           src={slide.src}
           alt={slide.alt}
@@ -138,23 +149,25 @@ export function ProductGallery({
   }
 
   return (
-    <div className="relative overflow-hidden bg-neutral-100">
+    <div className="relative overflow-hidden bg-surface">
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none"
         aria-label={`${alt} — swipe to browse photos`}
       >
         {slides.map((slide, index) => (
           <div
             key={slide.key}
-            className="relative aspect-square w-full shrink-0 snap-center snap-always overflow-hidden"
+            className="relative aspect-square w-full shrink-0 snap-center snap-always overflow-hidden bg-surface"
           >
             <Image
               src={slide.src}
               alt={slide.alt}
               fill
-              {...getSlideImageProps(product, slide.key)}
+              {...(slide.contain
+                ? { className: "object-contain p-8" }
+                : getSlideImageProps(product, slide.key))}
               sizes="(max-width: 512px) 100vw, 480px"
               priority={index === 0}
             />
@@ -162,22 +175,24 @@ export function ProductGallery({
         ))}
       </div>
 
-      <div className="absolute bottom-3 left-0 right-0 z-10 flex justify-center gap-1.5">
-        {slides.map((slide, index) => (
-          <button
-            key={slide.key}
-            type="button"
-            aria-label={`Show ${slide.label.toLowerCase()}`}
-            aria-current={activeIndex === index ? "true" : undefined}
-            onClick={() => scrollToIndex(index)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              activeIndex === index
-                ? "w-6 bg-black"
-                : "w-1.5 bg-neutral-300 hover:bg-neutral-400"
-            }`}
-          />
-        ))}
-      </div>
+      {slides.length > 1 && (
+        <div className="absolute bottom-4 left-0 right-0 z-10 flex justify-center gap-1.5">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.key}
+              type="button"
+              aria-label={`Show ${slide.label.toLowerCase()}`}
+              aria-current={activeIndex === index ? "true" : undefined}
+              onClick={() => scrollToIndex(index)}
+              className={`h-1 rounded-full transition-all duration-300 ${
+                activeIndex === index
+                  ? "w-5 bg-neutral-900"
+                  : "w-1 bg-neutral-300 hover:bg-neutral-400"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

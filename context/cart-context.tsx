@@ -41,7 +41,6 @@ type CartContextValue = {
   openDrawer: () => void;
   closeDrawer: () => void;
   addItem: (input: AddItemInput) => void;
-  buyNow: (input: AddItemInput) => void;
   removeItem: (lineId: string) => void;
   updateQuantity: (lineId: string, quantity: number) => void;
   clearCart: () => void;
@@ -135,14 +134,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [upsertItem, pulseBag],
   );
 
-  const buyNow = useCallback(
-    (input: AddItemInput) => {
-      upsertItem({ ...input, quantity: input.quantity ?? 1 }, false);
-      setIsOpen(true);
-    },
-    [upsertItem],
-  );
-
   const removeItem = useCallback((lineId: string) => {
     setItems((prev) => prev.filter((line) => line.lineId !== lineId));
   }, []);
@@ -175,7 +166,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       openDrawer: () => setIsOpen(true),
       closeDrawer: () => setIsOpen(false),
       addItem,
-      buyNow,
       removeItem,
       updateQuantity,
       clearCart,
@@ -188,7 +178,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       bagPulse,
       hydrated,
       addItem,
-      buyNow,
       removeItem,
       updateQuantity,
       clearCart,

@@ -3,16 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { CheckoutTrust } from "@/components/checkout-trust";
 import { ProductPrice } from "@/components/product-price";
 import { useCart } from "@/context/cart-context";
 import { formatUSD } from "@/lib/format";
-import {
-  ensureFreeShippingPromo,
-  FREE_SHIPPING_PROMO_CODE,
-} from "@/lib/shipping-promo";
 import { ONE_SIZE } from "@/lib/products";
-import { trackCheckoutStart } from "@/lib/tiktok-pixel";
+import { startCheckout } from "@/lib/start-checkout";
 
 export function CartDrawer() {
   const {
@@ -25,11 +20,6 @@ export function CartDrawer() {
   } = useCart();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const promoCode = FREE_SHIPPING_PROMO_CODE;
-
-  useEffect(() => {
-    ensureFreeShippingPromo();
-  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -47,29 +37,15 @@ export function CartDrawer() {
     setCheckoutError(null);
 
     try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: items.map((line) => ({
-            productId: line.productId,
-            slug: line.slug,
-            name: line.name,
-            colorName: line.colorName,
-            size: line.size,
-            quantity: line.quantity,
-          })),
-          promoCode: promoCode.trim() || undefined,
-        }),
-      });
-
-      const data = (await response.json()) as { url?: string; error?: string };
-
-      if (!response.ok || !data.url) {
-        throw new Error(data.error ?? "Checkout failed. Please try again.");
-      }
-
-      void trackCheckoutStart(
+      await startCheckout(
+        items.map((line) => ({
+          productId: line.productId,
+          slug: line.slug,
+          name: line.name,
+          colorName: line.colorName,
+          size: line.size,
+          quantity: line.quantity,
+        })),
         items.map((line) => ({
           productId: line.productId,
           name: line.name,
@@ -77,8 +53,6 @@ export function CartDrawer() {
           quantity: line.quantity,
         })),
       );
-
-      window.location.href = data.url;
     } catch (error) {
       setCheckoutError(
         error instanceof Error
@@ -108,7 +82,7 @@ export function CartDrawer() {
         aria-hidden={!isOpen}
       >
         <div className="flex h-14 items-center justify-between border-b border-neutral-200 px-4">
-          <h2 className="text-base font-semibold">Your bag</h2>
+          <h2 className="text-base font-bold uppercase tracking-wide">Cart</h2>
           <button
             type="button"
             onClick={closeDrawer}
@@ -125,7 +99,7 @@ export function CartDrawer() {
             <button
               type="button"
               onClick={closeDrawer}
-              className="bg-brand px-6 py-3 text-sm font-medium text-brand-foreground"
+              className="bg-neutral-900 px-6 py-3 text-xs font-medium uppercase tracking-widest text-white"
             >
               Continue shopping
             </button>
@@ -141,13 +115,13 @@ export function CartDrawer() {
                   <Link
                     href={`/products/${line.slug}`}
                     onClick={closeDrawer}
-                    className="relative h-24 w-24 shrink-0 overflow-hidden bg-neutral-100"
+                    className="relative h-24 w-24 shrink-0 overflow-hidden bg-white"
                   >
                     <Image
                       src={line.image}
                       alt={line.name}
                       fill
-                      className="object-cover"
+                      className="object-contain p-2"
                       sizes="96px"
                     />
                   </Link>
@@ -155,7 +129,7 @@ export function CartDrawer() {
                     <Link
                       href={`/products/${line.slug}`}
                       onClick={closeDrawer}
-                      className="truncate font-medium text-sm hover:underline"
+                      className="truncate text-sm font-bold uppercase tracking-wide hover:underline"
                     >
                       {line.name}
                     </Link>
@@ -171,7 +145,7 @@ export function CartDrawer() {
                     )}
                     <ProductPrice
                       cents={line.price}
-                      className="mt-1 text-sm font-medium text-red-600"
+                      className="mt-1 text-sm font-normal text-neutral-900"
                     />
                     <div className="mt-auto flex items-center justify-between pt-2">
                       <div className="flex items-center border border-neutral-200">
@@ -212,40 +186,28 @@ export function CartDrawer() {
               ))}
             </ul>
 
-            <div className="border-t border-neutral-200 bg-neutral-50 p-4">
-              <div className="mb-3 flex justify-between text-sm">
+            <div className="border-t border-neutral-300/80 bg-white p-4">
+              <div className="mb-4 flex justify-between text-sm">
                 <span className="text-neutral-600">Subtotal</span>
                 <ProductPrice
                   cents={subtotal}
-                  className="font-semibold text-red-600"
+                  className="font-normal text-neutral-900"
                 />
               </div>
-              <div className="mb-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2.5">
-                <p className="text-[10px] font-semibold uppercase text-green-800">
-                  Free shipping
-                </p>
-                <p className="mt-0.5 text-xs text-green-700">
-                  Code <span className="font-semibold">{promoCode}</span> applied
-                  automatically at checkout.
-                </p>
-              </div>
-              <p className="mb-3 text-xs text-neutral-500">
-                Free shipping included. Taxes shown at checkout if applicable.
+              <p className="mb-4 text-xs text-neutral-600">
+                Free shipping on all orders.
               </p>
-              <div className="mb-4">
-                <CheckoutTrust />
-              </div>
               {checkoutError && (
                 <p className="mb-3 text-xs text-red-600">{checkoutError}</p>
               )}
               <button
                 type="button"
                 disabled={checkoutLoading}
-                className="w-full bg-brand py-3.5 text-sm font-semibold text-brand-foreground transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full bg-neutral-900 py-3.5 text-xs font-medium uppercase tracking-widest text-white transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
                 onClick={handleCheckout}
               >
                 {checkoutLoading
-                  ? "Redirecting to Stripe…"
+                  ? "Opening checkout…"
                   : `Checkout — ${formatUSD(subtotal)}`}
               </button>
               <button

@@ -1,28 +1,16 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { TikTokPixel } from "@/components/tiktok-pixel";
 import { Providers } from "./providers";
 import "./globals.css";
 
-const comicHelvetic = localFont({
-  src: [
-    { path: "./fonts/ComicHelvetic_Light.otf", weight: "300" },
-    { path: "./fonts/ComicHelvetic_Medium.otf", weight: "400" },
-    { path: "./fonts/ComicHelvetic_Medium.otf", weight: "500" },
-    { path: "./fonts/ComicHelvetic_Heavy.otf", weight: "700" },
-    { path: "./fonts/ComicHelvetic_Heavy.otf", weight: "800" },
-  ],
-  variable: "--font-comic-helvetic",
-});
-
 export const metadata: Metadata = {
   title: {
-    default: "Artifact — Premium Cotton Tees",
-    template: "%s",
+    default: "Appropriate — Sunglasses",
+    template: "%s | Appropriate",
   },
   description:
-    "Mobile-first cotton tee shop. 100% cotton, free worldwide shipping, unisex fit.",
+    "UV400 acetate sunglasses. Free worldwide shipping.",
 };
 
 export default function RootLayout({
@@ -31,10 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${comicHelvetic.variable} h-full`}>
-      <body
-        className={`${comicHelvetic.className} flex min-h-full flex-col bg-white text-neutral-900 tracking-wide antialiased`}
-      >
+    <html lang="en" className="h-full">
+      <body className="flex min-h-full flex-col bg-surface font-sans text-neutral-900 antialiased">
         <Providers>{children}</Providers>
         <TikTokPixel />
         <Analytics />
