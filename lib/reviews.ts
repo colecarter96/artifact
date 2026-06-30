@@ -207,6 +207,45 @@ const slugReviews: Record<string, ProductReview[]> = {
       body: "",
     },
   ],
+  ysl: [
+    {
+      id: "ysl-1",
+      author: "dana p.",
+      rating: 5,
+      date: "Mar 8, 2026",
+      body: "I like it a lot",
+    },
+    {
+      id: "ysl-2",
+      author: "marcus l.",
+      rating: 5,
+      date: "Feb 21, 2026",
+      body: "Excellent",
+    },
+    {
+      id: "ysl-3",
+      author: "elena v.",
+      rating: 4,
+      date: "Feb 3, 2026",
+      body: "Classic shape and solid build. Arrived faster than expected.",
+    },
+  ],
+  oval: [
+    {
+      id: "oval-1",
+      author: "jasmine k.",
+      rating: 5,
+      date: "Mar 11, 2026",
+      body: "Looks exactly like the picture and are suuuuuper cute! For the price you can't beat this…also shipping was crazy fast! Love them all 🫶🏽 (ps…i have a tiny face but i can say confidently, these would suit whatever size face you have because despite being wide on me, it's still very stylish)",
+    },
+    {
+      id: "oval-2",
+      author: "maya r.",
+      rating: 5,
+      date: "Feb 25, 2026",
+      body: "Cute and fits good",
+    },
+  ],
 };
 
 /** Store-wide average + total count when it differs from displayed reviews */
@@ -214,6 +253,8 @@ const reviewSummaries: Record<string, ReviewSummary> = {
   chimi: { average: 4.6, count: 14 },
   cat: { average: 4.8, count: 22 },
   jmm: { average: 4.7, count: 87 },
+  ysl: { average: 4.4, count: 10 },
+  oval: { average: 4.8, count: 354 },
 };
 
 export function getProductReviews(slug: string): ProductReview[] {

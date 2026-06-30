@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-const OLIVER_DETAIL_IMAGES = [
-  "/sunglasses/JMM/jmmImg.avif",
-  "/sunglasses/JMM/jmmImg2.avif",
-];
+type ReviewDetailImagesProps = {
+  images: string[];
+};
 
-export function OliverDetailImages() {
+export function ReviewDetailImages({ images }: ReviewDetailImagesProps) {
   const [activeSrc, setActiveSrc] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,10 +25,12 @@ export function OliverDetailImages() {
     };
   }, [activeSrc]);
 
+  if (images.length === 0) return null;
+
   return (
     <>
       <div className="flex gap-2">
-        {OLIVER_DETAIL_IMAGES.map((src) => (
+        {images.map((src) => (
           <button
             key={src}
             type="button"
@@ -37,11 +38,7 @@ export function OliverDetailImages() {
             className="relative h-14 w-14 shrink-0 overflow-hidden bg-white transition hover:opacity-80"
             aria-label="View larger image"
           >
-            <img
-              src={src}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            <img src={src} alt="" className="h-full w-full object-cover" />
           </button>
         ))}
       </div>
@@ -52,7 +49,7 @@ export function OliverDetailImages() {
           onClick={() => setActiveSrc(null)}
           role="dialog"
           aria-modal="true"
-          aria-label="Enlarged product image"
+          aria-label="Enlarged review image"
         >
           <button
             type="button"

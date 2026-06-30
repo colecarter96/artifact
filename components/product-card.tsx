@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProductPrice } from "@/components/product-price";
-import { type Product } from "@/lib/products";
+import { getProductCoverColor, type Product } from "@/lib/products";
 
 type ProductCardProps = {
   product: Product;
 };
 
 export function ProductCard({ product }: ProductCardProps) {
-  const cover =
-    product.colors[0].secondaryImage ?? product.colors[0].image;
+  const coverColor = getProductCoverColor(product);
+  const cover = coverColor.secondaryImage ?? coverColor.image;
   const extraColors = product.colors.length - 1;
 
   return (

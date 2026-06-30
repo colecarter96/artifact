@@ -3,7 +3,12 @@ import {
   getReviewSummary,
   type ProductReview,
 } from "@/lib/reviews";
-import { OliverDetailImages } from "./oliver-detail-images";
+import { ReviewDetailImages } from "./review-detail-images";
+
+const REVIEW_IMAGES: Record<string, string[]> = {
+  jmm: ["/sunglasses/JMM/jmmImg.avif", "/sunglasses/JMM/jmmImg2.avif"],
+  oval: ["/sunglasses/oval/ovalImg.avif", "/sunglasses/oval/ovalImg1.avif"],
+};
 
 type ProductReviewsProps = {
   slug: string;
@@ -53,9 +58,9 @@ export function ProductReviews({ slug }: ProductReviewsProps) {
           {average} · {count} reviews
         </p>
       </div>
-      {slug === "jmm" && (
+      {REVIEW_IMAGES[slug] && (
         <div className="mt-3">
-          <OliverDetailImages />
+          <ReviewDetailImages images={REVIEW_IMAGES[slug]} />
         </div>
       )}
       <div className="mt-4">

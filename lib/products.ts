@@ -48,6 +48,8 @@ export type Product = {
   /** Extra gallery slides after the primary product image */
   galleryImages?: string[];
   colors: ColorVariant[];
+  /** Color shown on the home grid (defaults to first color) */
+  coverColorId?: string;
   sizes: Size[];
   featured?: boolean;
   tags: string[];
@@ -302,6 +304,26 @@ export const products: Product[] = [
   //   tags: ["new"],
   // },
   {
+    id: "oval",
+    slug: "oval",
+    name: "Annabelle",
+    category: "sunglasses",
+    tagline: "UV400",
+    description: SUNGLASSES_DESCRIPTION,
+    compareAtPrice: 4500,
+    price: 1350,
+    stripePriceId: "price_1TnvjQAKB242hqM694OBNE6I",
+    coverColorId: "brown",
+    colors: [
+      sunglassesColor("oval", "brown", "Brown", "#6b4423", "ovalBrownModel.png", "ovalBrown.png"),
+      sunglassesColor("oval", "black", "Black", "#1a1a1a", "ovalBlackModel.png", "ovalBlack.png"),
+      sunglassesColor("oval", "yellow", "Yellow", "#d4a017", "ovalYellowModel.png", "ovalYellow.png"),
+    ],
+    sizes: [],
+    featured: true,
+    tags: ["new"],
+  },
+  {
     id: "chimi",
     slug: "chimi",
     name: "Seafarer",
@@ -309,8 +331,8 @@ export const products: Product[] = [
     tagline: "UV400",
     description: SUNGLASSES_DESCRIPTION,
     compareAtPrice: 4500,
-    price: 900,
-    stripePriceId: "price_1Tmd23AKB242hqM6LAm8OBkR",
+    price: 1350,
+    stripePriceId: "price_1Tm3LzAKB242hqM6uyiw8ME4",
     colors: [
       sunglassesColor("Chimi", "yellow", "Yellow", "#d4a017", "ChimiYellowModel.png", "ChimiYellow.png"),
       sunglassesColor("Chimi", "black", "Black", "#1a1a1a", "ChimiBlackModel.png", "ChimiBlack.avif"),
@@ -321,6 +343,28 @@ export const products: Product[] = [
     featured: true,
     tags: ["new"],
   },
+  
+  {
+    id: "ysl",
+    slug: "ysl",
+    name: "Saint",
+    category: "sunglasses",
+    tagline: "UV400",
+    description: SUNGLASSES_DESCRIPTION,
+    compareAtPrice: 4500,
+    price: 1450,
+    stripePriceId: "price_1TnvjeAKB242hqM6rdFXLIpE",
+    coverColorId: "black",
+    colors: [
+      sunglassesColor("ysl", "black", "Black", "#1a1a1a", "yslBlackModel.png", "yslBlack.png"),
+      sunglassesColor("ysl", "tort", "Tortoise", "#8b5a2b", "yslTortModel.png", "yslTort.png"),
+      sunglassesColor("ysl", "yellow", "Yellow", "#d4a017", "yslYellowModel.png", "yslYellow.png"),
+    ],
+    sizes: [],
+    featured: true,
+    tags: ["new"],
+  },
+  
   {
     id: "jmm",
     slug: "jmm",
@@ -329,8 +373,8 @@ export const products: Product[] = [
     tagline: "UV400",
     description: SUNGLASSES_DESCRIPTION,
     compareAtPrice: 4500,
-    price: 950,
-    stripePriceId: "price_1Tmd4NAKB242hqM6s0vosdhM",
+    price: 1450,
+    stripePriceId: "price_1Tm3KwAKB242hqM6PFiwYKu6",
     colors: [
       sunglassesColor("JMM", "beige", "Beige", "#d4c4a8", "JMMBeigeModel.png", "JMMBeige.avif"),
       sunglassesColor("JMM", "black", "Black", "#1a1a1a", "JMMBlackModel.png", "JMMBlack.avif"),
@@ -341,6 +385,16 @@ export const products: Product[] = [
     tags: ["new"],
   },
 ];
+
+export function getProductCoverColor(product: Product): ColorVariant {
+  if (product.coverColorId) {
+    return (
+      product.colors.find((color) => color.id === product.coverColorId) ??
+      product.colors[0]
+    );
+  }
+  return product.colors[0];
+}
 
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
