@@ -70,8 +70,8 @@ export async function sendTikTokServerEvent(
   input: TikTokServerEventInput,
 ): Promise<{ ok: boolean; error?: string }> {
   const accessToken = process.env.EVENTS_API_ACCESS_TOKEN;
-  if (!accessToken) {
-    console.error("EVENTS_API_ACCESS_TOKEN is not configured.");
+  if (!accessToken || !TIKTOK_PIXEL_ID) {
+    console.error("TikTok Events API is not configured.");
     return { ok: false, error: "TikTok Events API is not configured." };
   }
 

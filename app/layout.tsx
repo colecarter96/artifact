@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { TikTokPixel } from "@/components/tiktok-pixel";
+import { TikTokPageView } from "@/components/tiktok-page-view";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-surface font-sans text-neutral-900 antialiased">
         <Providers>{children}</Providers>
         <TikTokPixel />
+        <TikTokPageView />
         <Analytics />
       </body>
     </html>

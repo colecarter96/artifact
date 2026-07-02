@@ -1,7 +1,9 @@
 import Script from "next/script";
-import { TIKTOK_PIXEL_ID } from "@/lib/tiktok-pixel";
+import { isTikTokPixelConfigured, TIKTOK_PIXEL_ID } from "@/lib/tiktok-pixel";
 
 export function TikTokPixel() {
+  if (!isTikTokPixelConfigured()) return null;
+
   return (
     <Script id="tiktok-pixel" strategy="afterInteractive">
       {`

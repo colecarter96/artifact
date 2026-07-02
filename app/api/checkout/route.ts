@@ -34,6 +34,7 @@ export async function POST(request: Request) {
     const productById = new Map(products.map((product) => [product.id, product]));
     const lineItems: { price: string; quantity: number }[] = [];
     const metadataItems: {
+      productId: string;
       name: string;
       color: string;
       size: string;
@@ -81,6 +82,7 @@ export async function POST(request: Request) {
       });
 
       metadataItems.push({
+        productId: item.productId,
         name: item.name,
         color: item.colorName,
         size: item.size,

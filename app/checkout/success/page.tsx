@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { OrderTimeline } from "@/components/order-timeline";
 import { useCart } from "@/context/cart-context";
-import { products, ONE_SIZE, SALE_PRICE_CENTS } from "@/lib/products";
-import { trackOrderComplete } from "@/lib/tiktok-pixel";
+import { products, ONE_SIZE } from "@/lib/products";
+import { getTikTokAttribution, trackOrderComplete } from "@/lib/tiktok-pixel";
 
 type OrderItem = {
   name: string;
@@ -35,13 +35,22 @@ type OrderDetails = {
 function orderItemsForTikTok(items: OrderItem[]) {
   return items.map((item) => {
     const product = products.find((p) => p.name === item.name);
+    if (!product) return null;
     return {
-      productId: product?.id ?? item.name,
-      name: item.name,
-      price: product?.price ?? SALE_PRICE_CENTS,
+      productId: product.id,
+      name: product.name,
+      price: product.price,
       quantity: item.quantity,
     };
-  });
+  }).filter((item): item is NonNullable<typeof item> => item !== null);
+}
+
+function buildSessionRequestUrl(sessionId: string): string {
+  const params = new URLSearchParams({ session_id: sessionId });
+  const { ttp, ttclid } = getTikTokAttribution();
+  if (ttp) params.set("ttp", ttp);
+  if (ttclid) params.set("ttclid", ttclid);
+  return `/api/checkout/session?${params.toString()}`;
 }
 
 function CheckoutSuccessContent() {
@@ -65,9 +74,7 @@ function CheckoutSuccessContent() {
       if (!id) return;
 
       try {
-        const response = await fetch(
-          `/api/checkout/session?session_id=${encodeURIComponent(id)}`,
-        );
+        const response = await fetch(buildSessionRequestUrl(id));
         const data = (await response.json()) as OrderDetails & { error?: string };
 
         if (!response.ok) {

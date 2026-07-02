@@ -1,5 +1,8 @@
-export const TIKTOK_PIXEL_ID =
-  process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID ?? "D8H6U7BC77UDLID684IG";
+export const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID ?? "";
+
+export function isTikTokPixelConfigured(): boolean {
+  return Boolean(TIKTOK_PIXEL_ID);
+}
 
 type TikTokContent = {
   content_id: string;
@@ -76,7 +79,24 @@ function getCookie(name: string): string | undefined {
 
 function getTtclid(): string | undefined {
   if (typeof window === "undefined") return undefined;
-  return new URLSearchParams(window.location.search).get("ttclid") ?? undefined;
+
+  const fromUrl = new URLSearchParams(window.location.search).get("ttclid");
+  if (fromUrl) {
+    sessionStorage.setItem("artifact-ttclid", fromUrl);
+    return fromUrl;
+  }
+
+  return sessionStorage.getItem("artifact-ttclid") ?? undefined;
+}
+
+export function getTikTokAttribution(): {
+  ttp?: string;
+  ttclid?: string;
+} {
+  return {
+    ttp: getCookie("_ttp"),
+    ttclid: getTtclid(),
+  };
 }
 
 async function identifyTikTokUser(params: IdentifyParams) {
@@ -219,10 +239,8 @@ export async function trackAddPaymentInfo(items: TikTokItem[]) {
 }
 
 export async function trackCheckoutStart(items: TikTokItem[]) {
-  const baseId = createEventId("checkout");
-  await trackEcommerce("InitiateCheckout", items, { eventId: `${baseId}_initiate` });
-  await trackEcommerce("AddPaymentInfo", items, {
-    eventId: `${baseId}_payment`,
+  await trackEcommerce("InitiateCheckout", items, {
+    eventId: createEventId("initiate_checkout"),
   });
 }
 

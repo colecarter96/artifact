@@ -1,4 +1,5 @@
 type CheckoutMetadataItem = {
+  productId: string;
   name: string;
   color: string;
   size: string;
@@ -27,6 +28,7 @@ export function buildCheckoutMetadata(
 
   items.forEach((item, index) => {
     const line = index + 1;
+    metadata[`item_${line}_id`] = item.productId.slice(0, 500);
     metadata[`item_${line}_name`] = item.name.slice(0, 500);
     metadata[`item_${line}_color`] = item.color.slice(0, 500);
     metadata[`item_${line}_size`] = item.size;
@@ -38,12 +40,23 @@ export function buildCheckoutMetadata(
 
 export function parseCheckoutMetadata(
   metadata: Record<string, string> | null | undefined,
-): { name: string; color: string; size: string; quantity: number }[] {
+): {
+  productId?: string;
+  name: string;
+  color: string;
+  size: string;
+  quantity: number;
+}[] {
   if (!metadata) return [];
 
   const count = Number.parseInt(metadata.item_count ?? "0", 10);
-  const items: { name: string; color: string; size: string; quantity: number }[] =
-    [];
+  const items: {
+    productId?: string;
+    name: string;
+    color: string;
+    size: string;
+    quantity: number;
+  }[] = [];
 
   for (let line = 1; line <= count; line += 1) {
     const name = metadata[`item_${line}_name`];
@@ -51,6 +64,7 @@ export function parseCheckoutMetadata(
     if (!name || !size) continue;
 
     items.push({
+      productId: metadata[`item_${line}_id`],
       name,
       color: metadata[`item_${line}_color`] ?? "Default",
       size,

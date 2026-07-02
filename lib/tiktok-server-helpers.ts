@@ -1,7 +1,18 @@
 import { parseCheckoutMetadata } from "@/lib/checkout-metadata";
-import { products, SALE_PRICE_CENTS } from "@/lib/products";
+import { products } from "@/lib/products";
 import type { TikTokServerContent } from "@/lib/tiktok-events-api";
 import type { TikTokItem } from "@/lib/tiktok-pixel";
+
+function findProduct(productId?: string, name?: string) {
+  if (productId) {
+    const byId = products.find((entry) => entry.id === productId);
+    if (byId) return byId;
+  }
+  if (name) {
+    return products.find((entry) => entry.name === name);
+  }
+  return undefined;
+}
 
 export function centsToDollars(cents: number): number {
   return Math.round(cents) / 100;
@@ -27,14 +38,14 @@ export function metadataItemsToTikTokItems(
   items: ReturnType<typeof parseCheckoutMetadata>,
 ): TikTokItem[] {
   return items.map((item) => {
-    const product = products.find((entry) => entry.name === item.name);
+    const product = findProduct(item.productId, item.name);
     return {
-      productId: product?.id ?? item.name,
+      productId: product?.id ?? item.productId ?? item.name,
       name: item.name,
-      price: product?.price ?? SALE_PRICE_CENTS,
+      price: product?.price ?? 0,
       quantity: item.quantity,
     };
-  });
+  }).filter((item) => item.price > 0);
 }
 
 export function getRequestIp(request: Request): string | undefined {

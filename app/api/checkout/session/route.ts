@@ -14,9 +14,13 @@ import {
 import { getStripe } from "@/lib/stripe";
 
 const TIKTOK_DEDUPE_TTL_SECONDS = 60 * 60 * 24 * 30;
+const TIKTOK_SENT_METADATA_KEY = "tiktok_sent";
 
 export async function GET(request: Request) {
-  const sessionId = new URL(request.url).searchParams.get("session_id");
+  const url = new URL(request.url);
+  const sessionId = url.searchParams.get("session_id");
+  const ttp = url.searchParams.get("ttp") ?? undefined;
+  const ttclid = url.searchParams.get("ttclid") ?? undefined;
 
   if (!sessionId) {
     return NextResponse.json(
@@ -42,12 +46,12 @@ export async function GET(request: Request) {
     const currency = session.currency?.toUpperCase() ?? "USD";
     const email = session.customer_details?.email ?? null;
     const tiktokEventId = purchaseEventId(sessionId);
-    const origin = new URL(request.url).origin;
+    const origin = url.origin;
     const tiktokItems = metadataItemsToTikTokItems(items);
 
     const redis = getRedis();
     const dedupeKey = `tiktok:purchase:${sessionId}`;
-    let shouldSendTikTok = true;
+    let shouldSendTikTok = session.metadata?.[TIKTOK_SENT_METADATA_KEY] !== "1";
 
     if (redis) {
       const existing = await redis.get<string>(dedupeKey);
@@ -59,6 +63,8 @@ export async function GET(request: Request) {
       const user = {
         email: email ?? undefined,
         externalId: email ?? undefined,
+        ttp,
+        ttclid,
         ip: getRequestIp(request),
         userAgent: request.headers.get("user-agent") ?? undefined,
       };
@@ -83,6 +89,13 @@ export async function GET(request: Request) {
           user,
         },
       ]);
+
+      await stripe.checkout.sessions.update(sessionId, {
+        metadata: {
+          ...session.metadata,
+          [TIKTOK_SENT_METADATA_KEY]: "1",
+        },
+      });
 
       if (redis) {
         await redis.set(dedupeKey, "1", { ex: TIKTOK_DEDUPE_TTL_SECONDS });
