@@ -82,7 +82,7 @@ export const PRODUCT_DESCRIPTION =
   "100% cotton shirts for people with something wrong with them. In a good way.";
 
 export const SUNGLASSES_DESCRIPTION =
-  "UV400 acetate sunglasses for the summer";
+  "UV400 Acetate Sunglasses.";
 
 function image(path: string): string {
   return `/shirtImages/${path}`;
